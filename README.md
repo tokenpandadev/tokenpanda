@@ -60,7 +60,7 @@ The honest consequence: the plan figures are as fresh as the last running sessio
 
 Nothing leaves your Mac. In five rules:
 
-1. The app makes no network calls: no analytics, no update check, no price fetch.
+1. The app makes no network calls and works offline: no analytics, no telemetry, no update check, no price fetch.
 2. From a transcript line it keeps the time, the ids, the model, the working directory name and the token counts. Not what you wrote, not what Claude answered.
 3. It never opens `memory/` or `tool-results/`, never reads the Keychain, a token or a cookie, and never asks you to sign in.
 4. It touches `~/.claude/settings.json` only when you click, and only its `statusLine` key. "Remove the status line entry" in Settings puts your previous entry back exactly.
