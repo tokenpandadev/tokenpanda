@@ -1,5 +1,6 @@
 // SPDX-FileCopyrightText: 2026 tokenpanda
 // SPDX-License-Identifier: MIT
+// swiftlint:disable line_length  (the transcript fixture lines are real-length JSON)
 import Testing
 import Foundation
 import Transcripts

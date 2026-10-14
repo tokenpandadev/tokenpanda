@@ -19,4 +19,5 @@ cyclomatic_complexity:
   warning: 30
   error: 50
 # identifier_name is off because the transcript parser names its fields exactly as the JSON keys are spelled.
-disabled_rules: [trailing_comma, implicit_optional_initialization, opening_brace, trailing_whitespace, comment_spacing, identifier_name, large_tuple, function_parameter_count, statement_position, switch_case_alignment]
+disabled_rules: [trailing_comma, implicit_optional_initialization, opening_brace, trailing_whitespace, comment_spacing, identifier_name, large_tuple, function_parameter_count, statement_position, switch_case_alignment, optional_data_string_conversion]
+# optional_data_string_conversion is off: lossy UTF-8 decoding of sysctl output and of a test pipe is the intended behaviour.
