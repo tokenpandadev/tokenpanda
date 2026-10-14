@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 
 /// The UserDefaults keys of the spec, section 10. Nothing else is stored in preferences.

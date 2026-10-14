@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+# SPDX-FileCopyrightText: 2026 tokenpanda
+# SPDX-License-Identifier: MIT
 """Feeds the app without touching ~/.claude/settings.json: runs claude in a pty with a --settings override whose
 statusLine command is a copy of the hook script pointed at the app's data folder, sends one prompt, waits, exits.
 No screen emulation; the raw output goes to a log.

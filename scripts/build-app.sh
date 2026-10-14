@@ -1,4 +1,6 @@
 #!/bin/sh
+# SPDX-FileCopyrightText: 2026 tokenpanda
+# SPDX-License-Identifier: MIT
 # Builds the .app bundle from the release binary: Info.plist with LSUIElement, the hook script and the app icon as resources,
 # an ad hoc signature, then a zip with its SHA-256. No Xcode, no network.
 #   scripts/build-app.sh [version]

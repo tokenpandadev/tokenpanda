@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 
 // The pace model of the spec, section 7. All arithmetic in seconds since the epoch; the clock is the Mac's zone.

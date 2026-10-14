@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 import UserNotifications
 

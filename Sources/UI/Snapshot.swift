@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 #if DEBUG
 // The PNG writer of the debug snapshot flags; release builds do not contain it.
 import AppKit

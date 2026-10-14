@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 
 // The status line feed as the hook writes it, one file per session. The app reads these fields and nothing else.

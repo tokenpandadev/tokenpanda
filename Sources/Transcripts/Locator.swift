@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 
 /// A transcript file: a session at depth 1 under a project, or a subagent file under <session>/subagents/.

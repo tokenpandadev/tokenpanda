@@ -1,4 +1,6 @@
 #!/bin/sh
+# SPDX-FileCopyrightText: 2026 tokenpanda
+# SPDX-License-Identifier: MIT
 # Release check: no leftover placeholder text and no absolute home path in any text file of the repository.
 # The one allowed home path is the generic example /Users/someone in tests and fixtures.
 # Casks/tokenpanda.rb is skipped: its RELEASE_VERSION and RELEASE_SHA256 are set by each release.

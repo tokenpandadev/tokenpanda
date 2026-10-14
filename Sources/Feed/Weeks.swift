@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 
 /// Week over week: the last value seen per weekly window and the time it first reported 100%, if it did.

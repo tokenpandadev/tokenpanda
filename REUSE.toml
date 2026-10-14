@@ -1,0 +1,10 @@
+version = 1
+SPDX-PackageName = "tokenpanda"
+SPDX-PackageSupplier = "tokenpanda <https://tokenpanda.dev>"
+SPDX-PackageDownloadLocation = "https://github.com/tokenpandadev/tokenpanda"
+
+[[annotations]]
+path = ["**.md", "**.json", "**.html", "**.png", "**.jpg", "**.svg", "**.icns", ".gitignore", "hook/statusline.sh"]
+precedence = "aggregate"
+SPDX-FileCopyrightText = "2026 tokenpanda"
+SPDX-License-Identifier = "MIT"

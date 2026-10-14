@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 // The line renderer: one function per component of the style guide, copied from the approved popover draft.
 // Nothing here is reinterpreted; a change to the sheet is a change here.
 

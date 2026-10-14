@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 
 /// Reads transcripts incrementally: every file remembers its byte offset and the message ids it has seen.

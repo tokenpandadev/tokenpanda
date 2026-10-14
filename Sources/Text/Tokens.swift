@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 // The token table of the style guide, section 1. One job per hex.
 
 public struct RGBA: Sendable, Hashable {

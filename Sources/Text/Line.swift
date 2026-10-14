@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 // A line of the popover is a run of pieces. Everything the app draws is a line of these.
 
 public enum Action: Sendable, Hashable {

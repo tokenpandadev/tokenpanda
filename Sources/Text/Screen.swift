@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 // What the popover shows, as data. The App fills it from the live readers; the snapshot flag fills it from fixtures.
 
 public struct PaceLines: Sendable, Equatable {

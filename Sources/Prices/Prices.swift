@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 
 // The bundled price table, spec section 6. Source: platform.claude.com/docs/en/about-claude/pricing, read 2026-10-13.

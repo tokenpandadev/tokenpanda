@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 import Foundation
 
 // The status line hook: the script as a resource, installed only on an explicit click, chaining an existing command.

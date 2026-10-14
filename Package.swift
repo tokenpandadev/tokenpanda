@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 // swift-tools-version: 6.0
 // tokenpanda: a macOS menu bar app that reads Claude Code's status line feed and the Mac's own figures. MIT licence.
 import PackageDescription

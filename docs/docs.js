@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 /* docs.js: the render functions of the components, exported as R6. Every name and figure is sample data. The block at the end is documentation chrome, not the sheet: it marks a table, specimen or nav strip that is wider than its column, so it scrolls in its own box with a visible edge. */
 window.R6 = (() => {
 const EIGHTHS = ['', '▏', '▎', '▍', '▌', '▋', '▊', '▉'];

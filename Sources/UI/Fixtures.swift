@@ -1,3 +1,5 @@
+// SPDX-FileCopyrightText: 2026 tokenpanda
+// SPDX-License-Identifier: MIT
 #if DEBUG
 // Sample data for the debug snapshot flag only; release builds do not contain it.
 import Foundation

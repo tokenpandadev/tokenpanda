@@ -1,3 +1,5 @@
+/* SPDX-FileCopyrightText: 2026 tokenpanda
+   SPDX-License-Identifier: MIT */
 /* docs.css: the component styles under .r6, which the Swift Text module mirrors, then the documentation chrome under .dk. A change to an .r6 rule is a change to the app's grammar and is made in both. */
 .r6{
   --tint:rgba(25,29,39,.82);
