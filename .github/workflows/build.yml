@@ -14,7 +14,9 @@ jobs:
       - name: Swift version
         run: swift --version
       - name: Lint
-        run: swiftlint lint --strict
+        run: |
+          brew install -q swiftlint
+          swiftlint lint --strict
       - name: Build
         run: swift build
       - name: Test
