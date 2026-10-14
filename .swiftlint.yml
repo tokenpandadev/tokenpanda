@@ -1,0 +1,22 @@
+# SPDX-FileCopyrightText: 2026 tokenpanda
+# SPDX-License-Identifier: MIT
+# Static analysis for the OpenSSF badge. Style rules that only argue with short names and long lines are relaxed;
+# the rules that find mistakes stay on.
+included: [Sources, Tests]
+line_length:
+  warning: 240
+  error: 300
+function_body_length:
+  warning: 120
+  error: 200
+type_body_length:
+  warning: 600
+  error: 1000
+file_length:
+  warning: 1200
+  error: 2000
+cyclomatic_complexity:
+  warning: 30
+  error: 50
+# identifier_name is off because the transcript parser names its fields exactly as the JSON keys are spelled.
+disabled_rules: [trailing_comma, implicit_optional_initialization, opening_brace, trailing_whitespace, comment_spacing, identifier_name, large_tuple, function_parameter_count, statement_position, switch_case_alignment]

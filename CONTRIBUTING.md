@@ -2,7 +2,7 @@
 
 Issues are welcome: bugs, wrong figures, ideas. A screenshot of the popover and your macOS version help most.
 
-Pull requests are welcome too. Keep them small, one change each, and run `swift build` and the tests before you open one (the README has the test command).
+Pull requests are welcome too. Keep them small, one change each, and run `swift build`, `swiftlint lint --strict` and the tests before you open one (the README has the test command). A change in behaviour comes with a test for it.
 
 The app keeps a few rules, and a change that needs to break one will not be merged:
 
