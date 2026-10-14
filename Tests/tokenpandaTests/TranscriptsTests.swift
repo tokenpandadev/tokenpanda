@@ -1,6 +1,5 @@
 // SPDX-FileCopyrightText: 2026 tokenpanda
 // SPDX-License-Identifier: MIT
-// swiftlint:disable line_length  (the transcript fixture lines are real-length JSON)
 import Testing
 import Foundation
 import Transcripts
@@ -11,6 +10,7 @@ import Prices
 struct TranscriptsTests {
     let fm = FileManager.default
 
+    // swiftlint:disable line_length
     func line(id: String, model: String = "claude-fable-5-1", ts: String = "2026-10-13T14:14:25.753Z", sidechain: Bool = false,
               session: String = "11111111-0000-4000-8000-000000000001", cwd: String = "/Users/someone/workspace",
               input: Int = 2, output: Int = 4, read: Int = 27543, write: Int = 17266, w5: Int = 0, w1: Int = 17266) -> String {
@@ -18,6 +18,7 @@ struct TranscriptsTests {
         {"parentUuid":"x","isSidechain":\(sidechain),"message":{"model":"\(model)","id":"\(id)","type":"message","role":"assistant","content":[{"type":"text","text":"ok"}],"usage":{"input_tokens":\(input),"cache_creation_input_tokens":\(write),"cache_read_input_tokens":\(read),"output_tokens":\(output),"cache_creation":{"ephemeral_1h_input_tokens":\(w1),"ephemeral_5m_input_tokens":\(w5)}}},"requestId":"req_\(id)","type":"assistant","uuid":"u","timestamp":"\(ts)","cwd":"\(cwd)","sessionId":"\(session)","version":"2.1.296","toolUseResult":"must not be kept","accountUuid":"must not be kept"}
         """
     }
+    // swiftlint:enable line_length
 
     func makeTree() throws -> URL {
         let root = fm.temporaryDirectory.appendingPathComponent("tokenpanda-transcripts-\(UUID().uuidString)/projects", isDirectory: true)
