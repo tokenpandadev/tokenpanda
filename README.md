@@ -1,3 +1,5 @@
+<img src="docs/mark.png" width="64" alt="tokenpanda">
+
 # tokenpanda
 
 tokenpanda is a macOS menu bar app that tells you how much of your Claude plan is left and whether you are ahead of the clock or behind it. It reads Claude Code's own status line feed and the transcripts already on your Mac, makes no network calls, and shows the Mac's CPU, memory and battery on a second tab.

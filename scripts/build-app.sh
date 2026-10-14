@@ -1,10 +1,10 @@
 #!/bin/sh
-# Builds the .app bundle from the release binary: Info.plist with LSUIElement, the hook script as a resource,
+# Builds the .app bundle from the release binary: Info.plist with LSUIElement, the hook script and the app icon as resources,
 # an ad hoc signature, then a zip with its SHA-256. No Xcode, no network.
 #   scripts/build-app.sh [version]
 set -eu
 cd "$(dirname "$0")/.."
-VERSION="${1:-0.1.0}"
+VERSION="${1:-0.1.1}"
 NAME="tokenpanda"
 BUNDLE_ID="dev.tokenpanda.app"
 BUILD="build"
@@ -18,6 +18,7 @@ rm -rf "$APP"
 mkdir -p "$APP/Contents/MacOS" "$APP/Contents/Resources"
 cp "$BIN" "$APP/Contents/MacOS/$NAME"
 cp hook/statusline.sh "$APP/Contents/Resources/hook.sh"
+cp Resources/AppIcon.icns "$APP/Contents/Resources/AppIcon.icns"
 cat > "$APP/Contents/Info.plist" <<EOF
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
@@ -25,6 +26,7 @@ cat > "$APP/Contents/Info.plist" <<EOF
 <dict>
   <key>CFBundleDevelopmentRegion</key><string>en</string>
   <key>CFBundleExecutable</key><string>$NAME</string>
+  <key>CFBundleIconFile</key><string>AppIcon</string>
   <key>CFBundleIdentifier</key><string>$BUNDLE_ID</string>
   <key>CFBundleInfoDictionaryVersion</key><string>6.0</string>
   <key>CFBundleName</key><string>$NAME</string>

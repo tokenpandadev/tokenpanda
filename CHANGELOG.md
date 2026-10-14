@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.1, 2026-10-14
+
+- App icon: the panda drawn in 44 terminal cells, also used for the documentation favicon.
+
 ## 0.1.0, not released yet
 
 The first version.

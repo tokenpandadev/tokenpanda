@@ -4,6 +4,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>tokenpanda spec</title>
+<link rel="icon" href="favicon.svg" type="image/svg+xml">
+<link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="docs.css">
 <style>@media (prefers-reduced-motion: reduce){.r6 .bar .fl{animation:none}.r6 .tip{transition:none}}</style>
 </head>
@@ -408,9 +411,9 @@ from Claude Code's own status feed on this Mac.</pre>
 
 <h2 id="packaging">17  Packaging</h2>
 <h3>Build</h3>
-<pre>scripts/build-app.sh 0.1.0   # swift build -c release, then build/tokenpanda.app: Contents/MacOS,
-                             # Contents/Resources (hook.sh), Info.plist (LSUIElement true), ad hoc codesign;
-                             # then build/tokenpanda-0.1.0.zip and its SHA-256</pre>
+<pre>scripts/build-app.sh 0.1.1   # swift build -c release, then build/tokenpanda.app: Contents/MacOS,
+                             # Contents/Resources (hook.sh, AppIcon.icns), Info.plist (LSUIElement true,
+                             # CFBundleIconFile AppIcon), ad hoc codesign; then build/tokenpanda-0.1.1.zip and its SHA-256</pre>
 <p>Two release paths. Releases are built by path one for now; path two is written here for when the project signs with a Developer ID.</p>
 <h3>Path one: unsigned (ad hoc), own tap</h3>
 <p>Ad hoc signing does not satisfy Gatekeeper on a downloaded file, and since macOS Sequoia Control-click no longer overrides it. Apple's current page (published 2026-05-27) gives the flow, which the README repeats:</p>
