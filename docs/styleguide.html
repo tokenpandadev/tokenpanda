@@ -1,0 +1,447 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tokenpanda style guide</title>
+<link rel="stylesheet" href="docs.css">
+<style>@media (prefers-reduced-motion: reduce){.r6 .bar .fl{animation:none}.r6 .tip{transition:none}}</style>
+</head>
+<body style="margin:0;background:#0e1120">
+<div class="r6 dk" data-pace="over">
+<div class="frame">
+
+<nav class="nav" aria-label="Documentation">
+<div class="l"><a class="tab" href="index.html"> Overview </a></div>
+<div class="l"><a class="tab" href="styleguide.html" aria-current="page"> Style guide </a></div>
+<div class="l"><a class="tab" href="spec.html"> Spec </a></div>
+<div class="l"><a class="tab" href="privacy.html"> Privacy </a></div>
+<div class="l"></div>
+<div class="toc"><div class="l d"><a href="#tokens">1  Tokens</a></div>
+<div class="l d"><a href="#type">2  Type</a></div>
+<div class="l d"><a href="#glyphs">3  Glyphs</a></div>
+<div class="l d"><a href="#material">4  Material</a></div>
+<div class="l d"><a href="#bars">5  Bar grammar</a></div>
+<div class="l d"><a href="#components">6  Components</a></div>
+<div class="l d"><a href="#copy">7  Copy rules</a></div>
+<div class="l d"><a href="#motion">8  Motion</a></div>
+<div class="l d"><a href="#a11y">9  Accessibility</a></div>
+</div></nav>
+
+<main class="main">
+<div class="head"><h1>Style guide</h1><span class="d">  tokenpanda  Claude Code native  14 October 2026</span></div>
+<div class="head d">living: every specimen below is rendered by docs.css and docs.js</div>
+<div class="head"><span class="d">Pace  </span><button type="button" class="tab" data-pace="ahead"> Ahead </button><span>  </span><button type="button" class="tab" data-pace="on"> On pace </button><span>  </span><button type="button" class="tab" data-pace="over" aria-pressed="true"> Over pace </button><span class="q">  flips every live specimen</span></div>
+<div class="rule">▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔</div>
+
+<p>The language is Claude Code's own usage screen, drawn on a terminal's dark glass. Everything is a line of text in SF Mono 12. Bars are block glyphs. Tables are aligned columns. One accent. The only warm colour is the coral of the fill past the pace tick. No cards, no rounded tiles, no icons in squares, no borders, no shadow except the popover's own.</p>
+<p>Source of record: <code>docs.css</code> and <code>docs.js</code> in this folder and the Text module of the Swift package, which draws the same lines. A change to a component is made in both. The observed Claude Code screens the language derives from were captured from Claude Code v2.1.296, theme dark, and the terminal profile is Terminal.app "Clear Dark": SF Mono 12, line spacing 1.0, background rgb(25,29,39) at alpha 0 with window blur.</p>
+
+<h2 id="tokens">1  Tokens</h2>
+<p>Named hexes. Each one has one job. The accent is Claude Code's bar fill; the coral is Claude Code's mark colour and is used here for one thing only, the fill past the tick when over pace.</p>
+<table>
+<tr><th></th><th>Hex</th><th>Name</th><th>Used for</th><th class="n">On glass</th></tr>
+<tr><td><span class="sw" style="color:#e0e0e0">████</span></td><td>#e0e0e0</td><td>text</td><td>default text, the percent, figures, the pace tick</td><td class="n">12.1 to 13.8</td></tr>
+<tr><td><span class="sw" style="color:#ededed">████</span></td><td>#ededed</td><td>bold</td><td>section titles and the status word, always weight 700</td><td class="n">13.7 to 15.6</td></tr>
+<tr><td><span class="sw" style="color:#999999">████</span></td><td>#999999</td><td>dim</td><td>reset line, pace lines, captions, the header line, chips</td><td class="n">5.6 to 6.4</td></tr>
+<tr><td><span class="sw" style="color:#888888">████</span></td><td>#888888</td><td>dimmer</td><td>free cells in the memory grid</td><td class="n">4.5 to 5.2</td></tr>
+<tr><td><span class="sw" style="color:#505050">████</span></td><td>#505050</td><td>quiet</td><td>key hints in the foot, the quietest line; never a figure the user needs</td><td class="n">2.0 to 2.3</td></tr>
+<tr><td><span class="sw" style="color:#b1b9f9">████</span></td><td>#b1b9f9</td><td>accent</td><td>used fill, selected tab, the ▔ rule, the selected row's ❯</td><td class="n">8.5 to 9.7</td></tr>
+<tr><td><span class="sw" style="color:#505370">████</span></td><td>#505370</td><td>track</td><td>the bar behind the fill; the fill itself when stale</td><td class="n"></td></tr>
+<tr><td><span class="sw" style="color:#d77757">████</span></td><td>#d77757</td><td>coral</td><td>the fill past the tick when over pace, nothing else</td><td class="n">5.1 to 5.8</td></tr>
+<tr><td><span class="sw" style="color:#ffc107">████</span></td><td>#ffc107</td><td>warning</td><td>the ⚠ hit mark on a week, swap cells, the Mac warning dot</td><td class="n">9.8 to 11.2</td></tr>
+<tr><td><span class="sw" style="color:#373737">████</span></td><td>#373737</td><td>box</td><td>the tooltip ground, the ground of code in these docs</td><td class="n"></td></tr>
+<tr><td><span class="sw" style="color:rgb(39,61,76)">████</span></td><td>rgb(39,61,76)</td><td>selection</td><td>row hover and settings row hover; the terminal's selection colour</td><td class="n"></td></tr>
+<tr><td><span class="sw" style="color:#000000">████</span></td><td>#000000</td><td>ink on accent</td><td>the text of the selected tab</td><td class="n"></td></tr>
+<tr><td><span class="sw" style="color:#191d27">████</span></td><td>#191d27</td><td>ink on bold</td><td>the text of the selected sub tab</td><td class="n"></td></tr>
+<tr><td><span class="sw" style="color:#ffffff">████</span></td><td>#ffffff</td><td>white</td><td>a tab under the pointer; text on the box ground</td><td class="n"></td></tr>
+</table>
+<p class="d">The last column is the WCAG contrast ratio measured against the rendered glass of this page, sampled at seven points from #111424 to #202030. The glass changes with the wallpaper behind it, so the ratio is a range. See section 9.</p>
+
+<h3>Hues, from the terminal's ANSI palette</h3>
+<p>Model rows, project rows, session rows and process rows carry a hue so a column of bars reads as one family. The hues are the ANSI colours of the "Clear Dark" profile, so they look native on the glass. They never carry meaning beyond grouping; no hue means good or bad.</p>
+<div class="spec"><div class="t" id="sp-ansi"></div></div>
+<table>
+<tr><th></th><th>Hex</th><th>Family</th><th>Rows</th></tr>
+<tr><td><span class="sw" style="color:#bd7bcd">████</span></td><td>#bd7bcd</td><td>magenta</td><td>Fable</td></tr>
+<tr><td><span class="sw" style="color:#c4ac62">████</span></td><td>#c4ac62</td><td>yellow</td><td>Opus</td></tr>
+<tr><td><span class="sw" style="color:#7ccbcd">████</span></td><td>#7ccbcd</td><td>cyan</td><td>Sonnet</td></tr>
+<tr><td><span class="sw" style="color:#6caa71">████</span></td><td>#6caa71</td><td>green</td><td>Haiku</td></tr>
+<tr><td><span class="sw" style="color:#6d96b4">████</span></td><td>#6d96b4</td><td>blue</td><td>projects</td></tr>
+<tr><td><span class="sw" style="color:#67b5ed">████</span></td><td>#67b5ed</td><td>bright blue</td><td>sessions</td></tr>
+<tr><td><span class="sw" style="color:#dee5eb">████</span></td><td>#dee5eb</td><td>white</td><td>processes</td></tr>
+</table>
+<p class="d">A model family that is not in this list gets the next unused ANSI hue in palette order (red #b45648 is skipped: red fills are banned). Red and bright red are never used.</p>
+
+<h2 id="type">2  Type</h2>
+<p>One face: SF Mono, the system font, loaded as <code>"SF Mono", ui-monospace, Menlo, monospace</code>. Nothing is bundled. Tabular numerals everywhere a number sits in a column; SF Mono is monospaced, so columns align by cell count.</p>
+<table class="nw">
+<tr><th>Size</th><th>Line</th><th>Weight</th><th>Where</th></tr>
+<tr><td>12 px</td><td>16 px</td><td>400</td><td>the popover body: every line, the terminal size</td></tr>
+<tr><td>12 px</td><td>16 px</td><td>700, #ededed</td><td>section titles, the status word, the selected tab, the selected row's name</td></tr>
+<tr><td>12 px</td><td>16 px</td><td>400, #999999</td><td>dim lines: reset, pace lines, captions, header line</td></tr>
+<tr><td>12 px</td><td>16 px</td><td>400 italic, #999999</td><td>allowed for a caption of an estimate (Claude Code's "Estimated usage by category"); unused in the popover so far</td></tr>
+<tr><td>13 px</td><td>20 px</td><td>400</td><td>allowed for body text where there is prose to read; these docs use it; the popover does not</td></tr>
+<tr><td>9 px</td><td>10 px</td><td>400</td><td>the 5 cell block bar inside the menu bar item</td></tr>
+<tr><td>13 px SF</td><td>22 px</td><td>400, 600 when over pace</td><td>the digits of the menu bar item; the OS sets the bar's face, so this is SF Pro Text with tabular numerals, not SF Mono</td></tr>
+<tr><td>13 px SF</td><td>17 px</td><td>400, title 600</td><td>the nudge banner; the OS draws it</td></tr>
+<tr><td>11 px SF</td><td></td><td>400</td><td>the time in the nudge banner</td></tr>
+</table>
+<div class="spec"><div class="t" id="sp-type"></div></div>
+<p><b>No big figure.</b> The terminal never sets one, so the popover does not. The bar and the percent beside it are the hero. One larger figure per window would be allowed only if the grammar can justify it; the default is none.</p>
+
+<h2 id="glyphs">3  Glyphs</h2>
+<p>The whole drawing vocabulary. Anything not in this table is not drawn. The quarter block mark of Claude Code (▗▖ ▘▘▝▝) is Claude's and is never drawn; the app has no mark.</p>
+<table class="glyphs">
+<tr><th>Glyph</th><th>Name</th><th>Meaning</th></tr>
+<tr><td class="gl">█</td><td>full block</td><td>one filled cell of a bar; also one cell of the menu bar bar</td></tr>
+<tr><td class="gl">▉ ▊ ▋ ▌ ▍ ▎ ▏</td><td>eighth blocks</td><td>the last cell of a fill, seven eighths down to one eighth</td></tr>
+<tr><td class="gl">▏</td><td>left eighth</td><td>on its own, in text colour, the pace tick: where the clock stands</td></tr>
+<tr><td class="gl">▓</td><td>dark shade</td><td>in the menu bar item only: a full cell past the tick when over pace, because the item is monochrome and cannot go coral</td></tr>
+<tr><td class="gl">░ ▒</td><td>light and medium shade</td><td>allowed (Claude Code's heatmap uses them); unused in the popover</td></tr>
+<tr><td class="gl">▔</td><td>upper eighth</td><td>the rule under the header line, in accent, full width</td></tr>
+<tr><td class="gl">▁</td><td>lower eighth</td><td>allowed as a base line; unused</td></tr>
+<tr><td class="gl">⛁</td><td>used cell</td><td>a used cell of the memory grid, in accent</td></tr>
+<tr><td class="gl">⛀</td><td>partial cell</td><td>allowed (Claude Code's context grid); unused</td></tr>
+<tr><td class="gl">⛶</td><td>free cell</td><td>a free cell of the memory grid, in dimmer</td></tr>
+<tr><td class="gl">⛝</td><td>crossed cell</td><td>swap in the memory grid, in warning</td></tr>
+<tr><td class="gl">❯</td><td>prompt</td><td>the lead of the selected row, in accent</td></tr>
+<tr><td class="gl">⎿</td><td>result</td><td>allowed for an indented result under a line; unused</td></tr>
+<tr><td class="gl">●</td><td>dot</td><td>the Mac warning dot after "Mac" in the tab strip, in warning</td></tr>
+<tr><td class="gl">⚠</td><td>warning</td><td>the hit mark at the end of a week bar; the Mac warning in the menu bar item</td></tr>
+<tr><td class="gl">↓ ↑</td><td>arrows</td><td>allowed as scroll hints at the edge of a list; unused</td></tr>
+<tr><td class="gl">⌘</td><td>command</td><td>the shortcut after Quit</td></tr>
+<tr><td class="gl">…</td><td>ellipsis</td><td>a name cut to its column: 13 characters and the ellipsis</td></tr>
+<tr><td class="gl">[ ]  [x]</td><td>brackets</td><td>the checkbox, off and on; and the dim chip "[list price equivalent  USD 1,140]"</td></tr>
+</table>
+<div class="spec"><div class="t" id="sp-glyphs"></div></div>
+<p>The wide cell glyphs (⛁ ⛀ ⛶ ⛝) take two cells each; the sheet sets them in a 2ch box so the grid stays square. ❯ and ⚠ take one cell in a 1ch box.</p>
+
+<h2 id="material">4  Material</h2>
+<p>The popover is the terminal's glass: a dark tint over the blurred desktop. On macOS that is an NSVisualEffectView; in these pages it is a painted wallpaper behind a tint. Recipe:</p>
+<ul>
+<li>tint rgba(25,29,39,.82), blur 24 px behind it</li>
+<li>popover 380 px wide at 1x, rendered at 2x; padding 12 px 10 px 10 px; radius 10 px</li>
+<li>shadow: a 1 px hairline at rgba(255,255,255,.1) as a ring, then 0 12px 32px rgba(0,0,0,.45)</li>
+<li>the arrow under the menu bar item: a 14 px square rotated 45 degrees, ground rgb(30,34,46), the same hairline on its two visible edges</li>
+<li>no border, no inner shadow, no gradient, no second surface inside the popover; rows and sections sit directly on the glass</li>
+<li>the menu bar strip, the nudge banner and the menu bar item are OS chrome and keep the OS material (these pages draw them for the stage only)</li>
+</ul>
+<div class="spec"><div class="t" id="sp-mat"></div></div>
+<p>The tooltip is the one thing with its own ground: the prompt box #373737, text in default colour, one cell of padding, no radius, no shadow.</p>
+
+<h2 id="bars">5  Bar grammar</h2>
+<p>A bar is a run of block glyphs on a track. It is text: it copies as text, it is read by VoiceOver through its label, and it scales with the font. The sheet closes the hairline SF Mono leaves between two full blocks by painting the full cells' background in the fill colour too.</p>
+<h3>Cell counts</h3>
+<table class="nw">
+<tr><th class="n">Cells</th><th>Where</th><th>Why</th></tr>
+<tr><td class="n">50</td><td>Claude Code's own usage bar; the reference form</td><td>as observed in the usage tab</td></tr>
+<tr><td class="n">36</td><td>the window section in the popover</td><td>so " 61% used" sits on the same line inside 47 content cells</td></tr>
+<tr><td class="n">24</td><td>a table row (model, project, session, process)</td><td>name column 14, one space, bar 24, two spaces, figure 5</td></tr>
+<tr><td class="n">20</td><td>a week in week over week</td><td>date 6, two spaces, bar 20, the hit mark, the percent 4</td></tr>
+<tr><td class="n">5</td><td>the menu bar item</td><td>one glance; at 9 px it is 27 px wide</td></tr>
+</table>
+<h3>Fill</h3>
+<p>For N cells and a used percentage U: <code>f = U / 100 × N</code>, full cells <code>floor(f)</code>, then one eighth block for the remainder, <code>round((f - floor(f)) × 8)</code> eighths; eight eighths is a full block. So 61% of 36 cells is 21 full cells and ▊ (0.96 of a cell rounds to eight eighths, a full block: 22 cells). Nothing is drawn fractionally in pixels; the eighth block is the resolution.</p>
+<h3>The tick</h3>
+<p>The tick ▏ stands at the elapsed share E of the window: cell <code>min(N - 1, round(E / 100 × N))</code>. It is drawn in text colour #e0e0e0 over the bar, in its own layer, so it shows on fill and on track alike. It is the clock. Rows and Mac bars have no tick: they are shares of a total, not windows of time.</p>
+<h3>Colour by pace state</h3>
+<table class="nw">
+<tr><th>State</th><th>Fill</th><th>Past the tick</th><th>Percent</th><th>Tick</th></tr>
+<tr><td>Ahead</td><td>accent</td><td>nothing past it</td><td>text</td><td>text</td></tr>
+<tr><td>On pace</td><td>accent</td><td>accent (within 5 points)</td><td>text</td><td>text</td></tr>
+<tr><td>Over pace</td><td>accent up to the tick</td><td>coral #d77757 from the tick on</td><td>text</td><td>text</td></tr>
+<tr><td>Stale</td><td>track #505370 on a track at 35% alpha</td><td>no coral, even if it was over</td><td>dim</td><td>dim</td></tr>
+</table>
+<p>Never red. Never a gradient. Never a second accent. The track is the only ground a bar has; row bars are "plain": no track, the hue on the glass.</p>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="sp-bar50"></div><div class="cap">50 cells  live, then ahead 24 of 32, on pace 57 of 55, over pace 61 of 55, stale, the tick alone at 55</div></div>
+<div class="t"><div id="sp-bar24"></div><div class="cap">24 cells  the same states</div></div>
+</div></div>
+<h3>The stale form</h3>
+<p>Stale means the last snapshot is older than an hour. The fill drops to the track colour, the percent goes dim, the tick goes dim, and the reset line is followed by "as of 13:05" instead of the pace lines. Nothing is projected from old data. The menu bar item dims to 50% in the same state.</p>
+
+<h2 id="components">6  Components</h2>
+<p>Every component the popover is built from, in every state it has, with the rule for using it. Hover a figure for its readout; click a checkbox or a section tab to switch it.</p>
+
+<h3>6.1  Header line and tab strip</h3>
+<div class="spec"><div class="wrap">
+<div class="t pop"><div id="c-h0"></div><div class="cap">default  Claude selected  a session feeds</div></div>
+<div class="t pop"><div id="c-h4"></div><div class="cap">between sessions  the snapshot time and its source</div></div>
+<div class="t pop"><div id="c-h1"></div><div class="cap">Mac selected</div></div>
+<div class="t pop"><div id="c-h2"></div><div class="cap">with the Mac warning dot</div></div>
+<div class="t pop"><div id="c-h3"></div><div class="cap">Settings selected</div></div>
+</div></div>
+<p class="use"><b>Use</b> once, at the top of the popover. Line one is the updated line, dim: "Usage live" with "Mac live" at the right while a session has fed in the last 60 s; otherwise "Usage as of HH:MM, last Claude Code session" takes the line. There is no plan badge: the tier is not in the feed. Then the ▔ rule in accent across the full width, then the three tabs in Claude Code's tab grammar: the selected one inverted (black on accent, bold), the others in default text, white under the pointer. The Mac tab gets a warning dot ● when memory pressure is warn or critical or one process has been over 80% CPU for 60 s.</p>
+<p class="use"><b>Do not</b> add a fourth tab, a title, a name or an icon; the popover has no title. Do not draw a second rule.</p>
+
+<h3>6.2  Block bar</h3>
+<p class="use">See section 5 for the grammar. <b>Use</b> the 36 cell bar for a window of time (it carries the tick), the 24 cell plain bar for a share of a total in a row, the 20 cell bar for a week, the 5 cell bar in the menu bar item. <b>Do not</b> draw a per model limit bar: the documented feed has no such figure. Do not draw a sparkline, a ring or a line chart.</p>
+
+<h3>6.3  Window section</h3>
+<div class="spec"><div class="wrap">
+<div class="t pop"><div id="c-wlive"></div><div class="cap">live  follows the pace switch</div></div>
+<div class="t pop"><div id="c-wover"></div><div class="cap">weekly  over pace</div></div>
+<div class="t pop"><div id="c-wahead"></div><div class="cap">5h window  ahead</div></div>
+<div class="t pop"><div id="c-won"></div><div class="cap">weekly  on pace</div></div>
+<div class="t pop"><div id="c-wstale"></div><div class="cap">weekly  stale, as of 13:05</div></div>
+</div></div>
+<p class="use"><b>Use</b> for each of the two windows, weekly first, then the 5h window, one blank line between them. Five lines: the title bold; the bar with " N% used" after it; the reset line dim with the clock time and the countdown as the second value; the status word bold followed by the projection dim; the allowance dim. The stale form has three lines: title, bar, reset, then "as of HH:MM".</p>
+<p class="use"><b>Do not</b> show a countdown alone, a percent alone, or a projection from stale data. Do not reorder the lines; the eye learns the positions.</p>
+
+<h3>6.4  Pace sentence</h3>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="c-plive"></div><div class="cap">live</div></div>
+<div class="t"><div id="c-pahead"></div><div class="cap">ahead</div></div>
+<div class="t"><div id="c-pon"></div><div class="cap">on pace</div></div>
+<div class="t"><div id="c-pover"></div><div class="cap">over pace</div></div>
+<div class="t"><div id="c-pstale"></div><div class="cap">stale</div></div>
+</div></div>
+<p class="use"><b>Use</b> under a window bar, three dim lines. The status word is the only bold text in the three lines. The projection has two branches: "limit Sun 01:20 at this rate" when the limit lands before the reset, "76% by reset at this rate" when it does not. The allowance is "0.5% an hour left" (one decimal under 1%, whole numbers above).</p>
+<p class="use"><b>Do not</b> join the lines with a separator; two spaces or a line break. Do not colour the status word; the bar's coral already says over pace.</p>
+
+<h3>6.5  Table row</h3>
+<div class="spec"><div class="wrap">
+<div class="t pop"><div id="c-rmodels"></div><div class="cap">models, 7 days  Fable selected with ❯</div></div>
+<div class="t pop"><div id="c-rprojects"></div><div class="cap">projects, 7 days  second row under the pointer</div></div>
+<div class="t pop"><div id="c-rsessions"></div><div class="cap">sessions, today</div></div>
+<div class="t pop"><div id="c-rprocs"></div><div class="cap">processes by CPU, share of the 9% in use  first row under the pointer</div></div>
+</div></div>
+<p class="use"><b>Use</b> for a list of named things with a share and a figure: models, projects, sessions, processes. Name column 14 cells (cut with …), one space, a 24 cell plain bar in the family hue, two spaces, the figure right aligned in 5 cells. The bar is the share of the list's total, not of a limit. Hover or focus the figure for the readout tooltip. Row hover is the terminal's selection colour across the full width. A selected row leads with ❯ in accent and its name in bold.</p>
+<p class="use"><b>Do not</b> add columns, icons, avatars or a percent next to the figure (the tooltip has it). Do not sort by anything but the figure, largest first. Lists are at most five rows; the rest is "other".</p>
+
+<h3>6.6  Section switch</h3>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="c-sub"></div><div class="cap">live  click to switch</div></div>
+<div class="t"><div id="c-subhover"></div><div class="cap">default  under the pointer  selected</div></div>
+</div></div>
+<p class="use"><b>Use</b> under a section title to switch its rows between Models, Projects and Sessions. The sub tab grammar is Claude Code's Overview switch: the selected one inverted in bold colour #ededed with ink #191d27; keys m, p and s switch it.</p>
+<p class="use"><b>Do not</b> use it for anything but sibling lists in one section. The main tab strip (6.1) uses the accent inversion; the sub form never does.</p>
+
+<h3>6.7  Chip</h3>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="c-chip"></div><div class="cap">dim brackets  chosen</div></div>
+<div class="t"><div id="c-chipno"></div><div class="cap">inverted text  not chosen</div></div>
+</div></div>
+<p class="use"><b>Use</b> the dim bracketed form for a figure that qualifies a list: "[list price equivalent  USD 1,140]" and "[44% by subagents]" under the token rows. The inverted form was shown and rejected: inverted text already means selected, and a chip is not selectable.</p>
+<p class="use"><b>Do not</b> put a chip anywhere but directly under the rows it qualifies. Never write "spent".</p>
+
+<h3>6.8  Weeks</h3>
+<div class="spec"><div class="wrap">
+<div class="t pop"><div id="c-weeks"></div><div class="cap">week over week  live current week</div></div>
+</div></div>
+<p class="use"><b>Use</b> for week over week: four rows, the date the week started (day and month), a 20 cell bar of the percentage used at the reset or at the limit, then the percent. A week that hit the limit ends in ⚠ in warning and names the day and time it hit, dim. The current week carries the tick and the note "so far", and goes coral past the tick when over pace.</p>
+<p class="use"><b>Do not</b> draw more than four weeks (the transcripts keep 30 days by default). Do not colour past weeks by pace: they are finished.</p>
+
+<h3>6.9  Memory grid</h3>
+<div class="spec"><div class="wrap">
+<div class="t pop"><div id="c-mem"></div><div class="cap">memory  25.5 of 36 GB  pressure normal  swap 0.9 GB</div></div>
+</div></div>
+<p class="use"><b>Use</b> for the Mac's memory picture, in Claude Code's context grid grammar: 20 by 10 cells of 0.18 GB each on a 36 GB machine, ⛁ used in accent, ⛶ free in dimmer, ⛝ swap in warning, filled left to right, top to bottom, the swap from the end. The legend under it names each glyph with its figure; the pressure level sits after swap.</p>
+<p class="use"><b>Do not</b> use the grid for CPU, GPU or battery; those are bars. Do not colour pressure: when it is warn or critical, the word says so and the Mac tab gets its dot.</p>
+
+<h3>6.10  Toggle and Settings rows</h3>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="c-cb"></div><div class="cap">off  on  click to toggle</div></div>
+<div class="t pop"><div id="c-settings"></div><div class="cap">settings rows  second row under the pointer</div></div>
+</div></div>
+<p class="use"><b>Use</b> the bracket checkbox, the TUI form, for every setting: "[ ]" off, "[x]" on, the label after it, an explanation on a second dim line indented under the label when needed. Rows highlight on hover like table rows. The privacy sentence stands as two dim lines. Quit is the last row with ⌘Q right aligned.</p>
+<p class="use"><b>Do not</b> use the macOS switch (it is not text) or ● and ○ (● is taken by the Mac warning dot). Do not add settings beyond the three in the spec without a decision. The status line entry row is an action, not a setting: "Install the status line entry" or "Remove the status line entry", one click each, with what it does on a dim second line.</p>
+
+<h3>6.11  Tooltip</h3>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="c-tip1"></div><div class="cap">readout</div></div>
+<div class="t"><div id="c-tip2"></div><div class="cap">week</div></div>
+<div class="t"><div id="c-tip3"></div><div class="cap">time</div></div>
+</div></div>
+<p class="use"><b>Use</b> for one line of detail on hover or focus of a figure: the ground is the prompt box #373737, text colour default, one cell of padding each side, no radius, no arrow. It appears above the figure, right aligned to it, 150 ms fade.</p>
+<p class="use"><b>Do not</b> put more than one line in it, and never a figure that only lives in the tooltip and nowhere else when the user needs it.</p>
+
+<h3>6.12  Menu bar item</h3>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="c-ilive"></div><div class="cap">live  dark bar</div></div>
+<div class="t"><div id="c-ion"></div><div class="cap">on pace</div></div>
+<div class="t"><div id="c-iahead"></div><div class="cap">ahead</div></div>
+<div class="t"><div id="c-iover"></div><div class="cap">over pace</div></div>
+<div class="t"><div id="c-istale"></div><div class="cap">stale</div></div>
+<div class="t"><div id="c-iwarn"></div><div class="cap">Mac warning</div></div>
+<div class="t"><div id="c-imac"></div><div class="cap">with the Mac figure</div></div>
+<div class="t"><div id="c-ilight"></div><div class="cap">light bar  over pace  Mac figure</div></div>
+</div></div>
+<p class="use"><b>Use</b> one item. The weekly percentage in SF with tabular digits, a gap of 5 px, a 5 cell block bar at 9 px with the tick, monochrome like Apple's own items (a template image, so it inverts on a light menu bar). Over pace: the digits go semibold and full cells past the tick become ▓. Stale: the whole item at 50% opacity. Mac warning: ⚠ appended. When "Mac figures in the bar" is on, " CPU 9%" is appended.</p>
+<p class="use"><b>Do not</b> use colour in the bar, do not add a second figure by default, do not cram four glyphs into it, do not animate it.</p>
+
+<h3>6.13  Nudge banner</h3>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="c-nb1"></div><div class="cap">at 80%</div></div>
+<div class="t"><div id="c-nb2"></div><div class="cap">before the 5h end</div></div>
+</div></div>
+<p class="use"><b>Use</b> the macOS notification banner as the OS draws it, no icon (the app has no mark). Title and body in the terminal's words: "Weekly at 80%" with "2 days 4 h to the reset. At this pace the limit lands Saturday 09:00." and "5h window ends in 15 min" with "34% used." Once per window each, only when the setting is on.</p>
+<p class="use"><b>Do not</b> nudge more than twice per window, do not add sound, do not put a percent without the clock time.</p>
+
+<h3>6.14  Open session</h3>
+<div class="spec"><div class="wrap">
+<div class="t pop"><div id="c-open"></div><div class="cap">two open sessions  the sample  hover a figure</div></div>
+</div></div>
+<p class="use"><b>Use</b> under the two windows, one entry per Claude Code session that has fed in the last 10 s. Line one: the project folder's name in bold, the model dim, the context figure "405.6k of 1M" dim at the right. Line two: the 36 cell bar of the context window with " 41% used". No tick: a context window is a share, not a time window. The figure's tooltip carries the list price equivalent and the lines added and removed. Largest context first, at most five.</p>
+<p class="use"><b>Do not</b> draw a breakdown of the context by category or per MCP tool; those figures are not in the feed. Do not keep a session on the list more than 60 s after its last feed. Omit the section when no session is open.</p>
+
+<h3>6.15  The popover, assembled</h3>
+<p>The three tabs as the build draws them, with sample data.</p>
+<div class="stage" style="max-width:none"><div class="cols">
+<div id="c-pop0"></div><div id="c-pop1"></div><div id="c-pop2"></div>
+</div></div>
+<p class="use">Order on the Claude tab: header, blank, weekly section, blank, 5h section, blank, open sessions, blank, the token section title with its switch and rows and chips, blank, week over week, blank, the key hints in quiet. The Mac tab: CPU bar, GPU bar, memory grid, battery bar with its two dim lines, processes by CPU. Settings: three checkbox rows, the status line entry row, the privacy sentence, Quit. The foot line names m p s on the Claude tab only, where those keys work.</p>
+
+<h2 id="copy">7  Copy rules</h2>
+<ul>
+<li><b>Status words</b>, exactly: "Ahead", "On pace", "Over pace". Bold, at the start of the status line, nowhere else.</li>
+<li><b>The reset line</b>: "Resets" then the clock time, then two spaces, then the countdown. Weekly: "Resets Sun 18:00  in 3d 3h". 5h window: "Resets 17:45  in 3h 25m". The weekday is three letters; the clock is 24 hour with a leading zero in the minutes.</li>
+<li><b>Clock times, never a countdown alone.</b> A countdown may follow a clock time as the second value. "in 1d 13h" on its own is banned.</li>
+<li><b>Projection</b>: "limit Sun 01:20 at this rate" or "76% by reset at this rate". Times are rounded to five minutes.</li>
+<li><b>Allowance</b>: "0.5% an hour left". One decimal under 1%, whole numbers from 1% up.</li>
+<li><b>The percent</b>: " 61% used" after the bar, one space before. "used" is lower case.</li>
+<li><b>Updated line</b>: "Usage live" with "Mac live" at the right while a session feeds; "Usage as of 13:05, last Claude Code session" between sessions. Stale sections say "as of 13:05" under the reset line, and the stale Claude tab adds "Limits are shared across Claude and Claude Code, so use elsewhere moves these figures."</li>
+<li><b>Context figure</b>: "405.6k of 1M", k and M with one decimal, the window size without one.</li>
+<li><b>"list price equivalent"</b>, never "spent", never "cost you". The chip reads "[list price equivalent  USD 1,140]". The setting's second line: "tokens at list prices, not the plan price".</li>
+<li><b>Agent share</b>: "[44% by subagents]".</li>
+<li><b>No separators.</b> No middle dot, no pipe, no em or en dash anywhere, in the UI or in the docs. Two spaces between values on a line, or a line break. Claude Code uses the middle dot; this app does not.</li>
+<li><b>No centred text.</b> Everything starts at the left cell. Figures are right aligned in their column, which is alignment, not centring.</li>
+<li><b>No emoji</b>, no sparkles, no "AI" as decoration.</li>
+<li><b>Sentence case</b> for titles and labels: "Weekly (all models)", "Tokens by model  7 days", "Week over week", "Processes by CPU", "Mac figures in the bar".</li>
+<li><b>Units</b>: tokens as "72.4M", "2.1B"; memory "25.5 of 36 GB (71%)"; power "47.6 W in  94 W adapter"; time "full in 51 min", "health 89%", "316 cycles"; CPU "user 5%  system 4%  10 cores".</li>
+<li><b>The privacy sentence</b> in Settings, verbatim: "This app makes no network calls. Usage comes from Claude Code's own status feed on this Mac."</li>
+<li><b>Key hints</b> in the foot, quiet: "Esc closes  Tab switches  m p s sections" on the Claude tab, "Esc closes  Tab switches" on the others.</li>
+<li><b>Unknown window</b>: a feed key the app does not know prints "unknown window" in place of the pace lines; nothing is guessed.</li>
+<li><b>Names</b>: "Claude Code", "5h window", "weekly" are facts and may be used. The app's name, tokenpanda, is never drawn in the popover.</li>
+</ul>
+
+<h2 id="motion">8  Motion</h2>
+<p>Two moments, nothing else moves.</p>
+<ul>
+<li><b>The popover opens</b>: opacity 0 to 1 and scale .96 to 1 from the arrow, 150 ms, ease-out. Closing is the same in reverse.</li>
+<li><b>The bars fill</b> once to their value when a tab renders: a clip from the left, 240 ms, ease-out; the tick is already in place and the fill arrives under it.</li>
+</ul>
+<p>The tooltip fades in over 150 ms. The menu bar item never animates. Nothing bounces, nothing loops, nothing pulses.</p>
+<p><b>Reduced motion.</b> With "Reduce motion" on, every transition and animation is off and the finished state is shown at once. In CSS the animations live inside <code>@media (prefers-reduced-motion: no-preference)</code>; in Swift, read <code>NSWorkspace.shared.accessibilityDisplayShouldReduceMotion</code> and skip both moments.</p>
+
+<h2 id="a11y">9  Accessibility</h2>
+<h3>Contrast, measured</h3>
+<p>Measured on the rendered glass of this page, WebKit, 2x, seven sample points. The glass ranges from #111424 (over the darkest wallpaper) to #202030 (over the brightest glow). WCAG 2 ratios:</p>
+<table class="nw">
+<tr><th>Colour</th><th class="n">Lowest</th><th class="n">Highest</th><th>Reads as</th><th>Carries</th></tr>
+<tr><td>#e0e0e0 text</td><td class="n">12.1</td><td class="n">13.8</td><td>AAA</td><td>every figure the user needs</td></tr>
+<tr><td>#999999 dim</td><td class="n">5.6</td><td class="n">6.4</td><td>AA for normal text (4.5 needed)</td><td>reset, pace lines, captions</td></tr>
+<tr><td>#888888 dimmer</td><td class="n">4.5</td><td class="n">5.2</td><td>AA at the low end, barely</td><td>free cells only, a glyph with a legend</td></tr>
+<tr><td>#505050 quiet</td><td class="n">2.0</td><td class="n">2.3</td><td>fails AA</td><td>key hints only; every hint is also a working key and is in the docs; nothing the user needs is written in quiet</td></tr>
+<tr><td>#b1b9f9 accent</td><td class="n">8.5</td><td class="n">9.7</td><td>AAA</td><td>fills, rule, selected tab ground</td></tr>
+<tr><td>#d77757 coral</td><td class="n">5.1</td><td class="n">5.8</td><td>AA</td><td>fill past the tick; the status word repeats it in words</td></tr>
+<tr><td>#ffc107 warning</td><td class="n">9.8</td><td class="n">11.2</td><td>AAA</td><td>hit mark, swap, the dot</td></tr>
+</table>
+<p>Rule: colour never carries a meaning alone. Over pace is coral and the word "Over pace". A hit week is ⚠ and "Thu 16:10". A Mac warning is the dot and the pressure word on the Mac tab.</p>
+
+<h3>VoiceOver labels per component</h3>
+<p>Bars are glyph runs, so each component sets one accessibility label that says the whole thing in words. The Swift build sets these on the row or section element, not on each glyph.</p>
+<table class="nw">
+<tr><th>Component</th><th>Role</th><th>Label</th></tr>
+<tr><td>Menu bar item</td><td>button, "Claude usage"</td><td>"Weekly 61% used, over pace, resets Sunday 18:00"; stale adds "as of 13:05"; Mac warning adds "Mac warning"</td></tr>
+<tr><td>Popover</td><td>dialog, "Usage"</td><td></td></tr>
+<tr><td>Tab strip</td><td>tab list; each tab a tab with selected state</td><td>"Claude", "Mac", "Mac, warning", "Settings"</td></tr>
+<tr><td>Window section</td><td>group</td><td>"Weekly, all models. 61% used. Resets Sunday 18:00, in 3 days 3 hours. Over pace, limit Sunday 01:20 at this rate. 0.5% an hour left."</td></tr>
+<tr><td>Table row</td><td>row; the figure focusable</td><td>"Fable 5.1, 1.02 billion tokens, 49% of 7 days"; the tooltip text is the row's help</td></tr>
+<tr><td>Section switch</td><td>tab list, small</td><td>"Models", "Projects", "Sessions"</td></tr>
+<tr><td>Chip</td><td>static text</td><td>"list price equivalent, 1,140 US dollars"; "44% by subagents"</td></tr>
+<tr><td>Week</td><td>row</td><td>"Week of 28 September, 100%, hit the limit Thursday 16:10"</td></tr>
+<tr><td>Open session</td><td>group; the figure focusable</td><td>"workspace, Fable 5.1, context 405.6 thousand of 1 million, 41% used"; the tooltip text is its help</td></tr>
+<tr><td>Memory grid</td><td>image with a description</td><td>"Memory 25.5 of 36 gigabytes, 71%, swap 0.9 gigabytes, pressure normal"; the cells are hidden from VoiceOver</td></tr>
+<tr><td>Checkbox</td><td>checkbox with checked state</td><td>the row label; the second line is its help</td></tr>
+<tr><td>Tooltip</td><td>help text of the figure</td><td>the tooltip line</td></tr>
+<tr><td>Nudge</td><td>the OS notification</td><td>the title and body</td></tr>
+</table>
+
+<h3>Keyboard</h3>
+<ul>
+<li>Open and close the popover from the menu bar item; Esc closes it.</li>
+<li>Tab moves between the three tabs; Shift Tab goes back. Inside a tab, the figures and the checkboxes are in the tab order in reading order.</li>
+<li>m, p, s switch the token section on the Claude tab.</li>
+<li>Space toggles a focused checkbox.</li>
+<li>⌘Q quits.</li>
+<li>The focus ring is a 1 px accent outline with 1 px offset, custom, never the default blue.</li>
+</ul>
+<p>Text size follows the system monospace font; the layout is cells, so it holds at any size.</p>
+
+<div class="foot">Overview  Style guide  Spec  Privacy</div>
+</main>
+</div>
+</div>
+<script src="docs.js"></script>
+<script>
+(() => {
+const root = document.querySelector('.r6');
+R6.probe(root);
+const {L, BL, sp, col, rcol, bar, pct, pace, windowSection, paceLines, header, rows, MODELS, PROJECTS, SESSIONS, PROCS, subTabs, week, memGrid, cbRow, item, strip, popover, STATES} = R6;
+const $ = id => document.getElementById(id);
+const mOver = pace('weekly', 61), mOn = pace('weekly', 57), mAhead = pace('five', 24);
+
+/* tokens and type */
+const ansi = (list) => L(' ' + list.map(h => '<span style="color:' + h + '">████</span>').join('    ')) + L(' ' + list.map(h => sp(h, 'd')).join('    '));
+$('sp-ansi').innerHTML = L(sp('ANSI, the profile Clear Dark', 'd'))
+  + ansi(['#35424c', '#b45648', '#6caa71', '#c4ac62', '#6d96b4', '#bd7bcd', '#7ccbcd', '#dee5eb'])
+  + ansi(['#465c6d', '#df6c5a', '#79be7e', '#e5c872', '#67b5ed', '#d389e5', '#84dde0', '#e5eff5']);
+$('sp-type').innerHTML = L('SF Mono 12  ' + sp('Weekly (all models)', 'b') + '  61% used  ' + sp('Resets Sun 18:00', 'd'))
+  + L('<span style="font-size:13px">SF Mono 13  ' + sp('Weekly (all models)', 'b') + '  61% used  ' + sp('Resets Sun 18:00', 'd') + '</span>')
+  + L('<span class="i d">italic dim</span>  ' + sp('Estimated usage by category', 'i d'))
+  + L(sp('quiet', 'q') + '  ' + sp('Esc closes  Tab switches  m p s sections', 'q'));
+$('sp-glyphs').innerHTML = L('█ ▉ ▊ ▋ ▌ ▍ ▎ ▏  ▔ ▁  ░ ▒ ▓  <span class="gc">⛁</span><span class="gc">⛀</span><span class="gc">⛶</span><span class="gc">⛝</span> <span class="g">❯</span> ⎿ ● <span class="g">⚠</span> ↓ ↑ ⌘ …')
+  + L(sp('blocks and eighths  rule and base  shades  cells  prompt  result  dot  warning  arrows  command  ellipsis', 'd'));
+$('sp-mat').innerHTML = L('<span class="mat"><span>wallpaper</span></span>  <span class="mat glass"><span>glass</span></span>')
+  + L(sp('rgb(25,29,39) at .82 over the blurred wallpaper, blur 24 px', 'd'));
+
+/* bars */
+$('sp-bar50').innerHTML = L('<span id="lv-bar50"></span>') + L(bar(50, 24, 32) + pct(mAhead)) + L(bar(50, 57, 55) + pct(mOn)) + L(bar(50, 61, 55, {over:true}) + pct(mOver)) + L(bar(50, 61, 55, {stale:true}) + pct(mOver, true)) + L(bar(50, 0, 55) + sp(' the tick alone at 55%', 'd'));
+$('sp-bar24').innerHTML = L('<span id="lv-bar24"></span>') + L(bar(24, 24, 32) + pct(mAhead)) + L(bar(24, 57, 55) + pct(mOn)) + L(bar(24, 61, 55, {over:true}) + pct(mOver)) + L(bar(24, 61, 55, {stale:true}) + pct(mOver, true)) + L(bar(24, 0, 55) + sp(' tick alone', 'd'));
+
+/* components */
+$('c-h0').innerHTML = header(0, false); $('c-h4').innerHTML = header(0, false, '13:05'); $('c-h1').innerHTML = header(1, false); $('c-h2').innerHTML = header(0, true); $('c-h3').innerHTML = header(2, false);
+$('c-wover').innerHTML = windowSection(mOver); $('c-wahead').innerHTML = windowSection(mAhead); $('c-won').innerHTML = windowSection(mOn); $('c-wstale').innerHTML = windowSection(mOver, {stale:true});
+$('c-pahead').innerHTML = paceLines(mAhead); $('c-pon').innerHTML = paceLines(mOn); $('c-pover').innerHTML = paceLines(mOver); $('c-pstale').innerHTML = paceLines(mOver, true);
+$('c-rmodels').innerHTML = rows(MODELS, '7 days', {selected:0}); $('c-rprojects').innerHTML = rows(PROJECTS, '7 days', {hover:1}); $('c-rsessions').innerHTML = rows(SESSIONS, 'today'); $('c-rprocs').innerHTML = rows(PROCS, '', {hover:0});
+$('c-sub').innerHTML = L(' <span id="lv-sub">' + subTabs(0) + '</span>'); $('c-subhover').innerHTML = L(' ' + subTabs(0, 1));
+$('c-chip').innerHTML = L(' ' + sp('[list price equivalent  USD 1,140]', 'd') + '  ' + sp('[44% by subagents]', 'd'));
+$('c-chipno').innerHTML = L(' <span class="tab sub" aria-selected="true"> list price equivalent  USD 1,140 </span>  <span class="tab sub" aria-selected="true"> 44% by subagents </span>');
+$('c-mem').innerHTML = memGrid(); $('c-open').innerHTML = R6.openSessions();
+$('c-cb').innerHTML = L(' <button type="button" class="cb" role="checkbox" aria-checked="false">[ ]</button> off   <button type="button" class="cb" role="checkbox" aria-checked="true">[x]</button> on');
+$('c-settings').innerHTML = cbRow('Mac figures in the bar', false) + cbRow('Nudge at 80% and before the 5h end', true, null, {hover:true}) + cbRow('List price equivalent', true, 'tokens at list prices, not the plan price') + BL + R6.hookRow(true) + BL + L(' ' + sp('This app makes no network calls. Usage comes', 'd')) + L(' ' + sp("from Claude Code's own status feed on this Mac.", 'd')) + BL + L(' Quit' + rcol('⌘Q', R6.POP - 5));
+$('c-tip1').innerHTML = L(' <span class="tip show">1.02B tokens  49% of 7 days</span>'); $('c-tip2').innerHTML = L(' <span class="tip show">Week of 28 Sep  hit Thu 16:10</span>'); $('c-tip3').innerHTML = L(' <span class="tip show">14:19  last snapshot</span>');
+$('c-ion').innerHTML = L(strip(item(57, 55))); $('c-iahead').innerHTML = L(strip(item(24, 32))); $('c-iover').innerHTML = L(strip(item(61, 55, {over:true}))); $('c-istale').innerHTML = L(strip(item(61, 55, {stale:true}))); $('c-iwarn').innerHTML = L(strip(item(61, 55, {warn:true}))); $('c-imac').innerHTML = L(strip(item(61, 55, {mac:true}))); $('c-ilight').innerHTML = L(strip(item(61, 55, {over:true, mac:true}), true));
+$('c-nb1').innerHTML = '<div class="nb" role="status"><span class="tx"><b>Weekly at 80%</b><p>2 days 4 h to the reset. At this pace the limit lands Saturday 09:00.</p></span><time>now</time></div>';
+$('c-nb2').innerHTML = '<div class="nb" role="status"><span class="tx"><b>5h window ends in 15 min</b><p>34% used.</p></span><time>now</time></div>';
+$('c-pop1').innerHTML = popover(1, {weekly:61, five:24});
+$('c-pop2').innerHTML = popover(2, {weekly:61, five:24});
+
+/* live */
+function render(key, anim) {
+  const st = STATES[key], m = pace(st.win, st.used);
+  root.dataset.pace = key;
+  root.querySelectorAll('.tab[data-pace]').forEach(b => b.setAttribute('aria-pressed', String(b.dataset.pace === key)));
+  $('lv-bar50').innerHTML = bar(50, m.used, m.E, {over:m.over, anim}) + pct(m);
+  $('lv-bar24').innerHTML = bar(24, m.used, m.E, {over:m.over, anim}) + pct(m);
+  $('c-wlive').innerHTML = windowSection(m, {anim});
+  $('c-plive').innerHTML = paceLines(m);
+  $('c-ilive').innerHTML = L(strip(item(m.used, m.E, {over:m.over})));
+  const mW = pace('weekly', st.win === 'weekly' ? st.used : 61);
+  $('c-weeks').innerHTML = week('21 Sep', 88, {anim}) + week('28 Sep', 100, {hit:true, note:'Thu 16:10', anim}) + week('5 Oct', 96, {anim}) + week('12 Oct', mW.used, {E:mW.E, over:mW.over, note:'so far', anim});
+  $('c-pop0').innerHTML = popover(0, {weekly:st.win === 'weekly' ? st.used : 45, five:24}, {anim});
+}
+root.querySelectorAll('.tab[data-pace]').forEach(b => b.addEventListener('click', () => { render(b.dataset.pace, true); history.replaceState(null, '', '#pace=' + b.dataset.pace); }));
+root.addEventListener('click', e => {
+  const cb = e.target.closest('.cb'); if (cb) { const on = cb.getAttribute('aria-checked') !== 'true'; cb.setAttribute('aria-checked', String(on)); cb.textContent = on ? '[x]' : '[ ]'; return; }
+  const sub = e.target.closest('#lv-sub .tab'); if (sub) { document.querySelectorAll('#lv-sub .tab').forEach(x => x.setAttribute('aria-pressed', String(x === sub))); }
+});
+const fromHash = () => { const m = location.hash.match(/pace=(ahead|on|over)/); return m ? m[1] : 'over'; };
+render(fromHash(), false);
+addEventListener('hashchange', () => render(fromHash(), true));
+})();
+</script>
+</body>
+</html>

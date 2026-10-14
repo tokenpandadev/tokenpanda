@@ -1,0 +1,82 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tokenpanda overview</title>
+<link rel="stylesheet" href="docs.css">
+<style>@media (prefers-reduced-motion: reduce){.r6 .bar .fl{animation:none}.r6 .tip{transition:none}}</style>
+</head>
+<body style="margin:0;background:#0e1120">
+<div class="r6 dk">
+<div class="frame">
+
+<nav class="nav" aria-label="Documentation">
+<div class="l"><a class="tab" href="index.html" aria-current="page"> Overview </a></div>
+<div class="l"><a class="tab" href="styleguide.html"> Style guide </a></div>
+<div class="l"><a class="tab" href="spec.html"> Spec </a></div>
+<div class="l"><a class="tab" href="privacy.html"> Privacy </a></div>
+<div class="l"></div>
+<div class="toc"><div class="l d"><a href="#what">1  What it is</a></div>
+<div class="l d"><a href="#idea">2  The one idea</a></div>
+<div class="l d"><a href="#rules">3  The rules it keeps</a></div>
+<div class="l d"><a href="#pages">4  The pages</a></div>
+</div></nav>
+
+<main class="main">
+<div class="head"><h1>Overview</h1><span class="d">  tokenpanda  documentation  14 October 2026</span></div>
+<div class="head d">a macOS menu bar app for the Claude plan windows and the Mac, drawn in Claude Code's own grammar</div>
+<div class="rule">▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔</div>
+
+<h2 id="what">1  What it is</h2>
+<p>A macOS menu bar app, open source, with no data collection. It answers one question: how much of your Claude plan is left, and are you ahead of or behind the clock. Mac stats are a second tab.</p>
+<p>The app is called tokenpanda. The name does not contain "Claude" or "Anthropic", and the popover carries no name at all. Inside the app, "Claude Code", "5h window" and "weekly" are facts and are used as such.</p>
+<p>The popover reads like the usage screen of Claude Code opened from the menu bar, drawn on a terminal's dark glass: SF Mono 12, one accent, bars made of block glyphs, aligned mono columns, no cards, no icons in squares.</p>
+
+<div class="stage"><div id="lv-pop"></div></div>
+<p class="d">The assembled popover, Claude tab, with sample data. Hover a figure for its readout.</p>
+
+<h2 id="idea">2  The one idea</h2>
+<p><b>Pace, not percent.</b> A used percentage alone says nothing. 61% used is fine on a Saturday and a problem on a Tuesday. So every window bar carries a tick at the elapsed share of the window. Fill behind the tick is time you have already paid for. Fill past the tick is coral: you are spending faster than the clock.</p>
+<p>Under the bar, three dim lines say it in words: when the window resets as a clock time, a status word (Ahead, On pace, Over pace) with the projection at the current rate, and what is left per remaining hour. The numbers are computed from four inputs: used percentage, window start, reset time, now. The model is on the <a href="spec.html#pace">spec page</a> with the worked example.</p>
+<div class="spec"><div class="wrap">
+<div class="t"><div id="lv-win"></div><div class="cap">weekly  over pace  the sample</div></div>
+<div class="t"><div id="lv-five"></div><div class="cap">5h window  ahead  the same model, the other branch</div></div>
+</div></div>
+
+<h2 id="rules">3  The rules it keeps</h2>
+<ul>
+<li><b>Documented status line feed only.</b> Plan percentages come from the JSON that Claude Code hands its status line script: <code>rate_limits.five_hour</code> and <code>rate_limits.seven_day</code>, each with <code>used_percentage</code> and <code>resets_at</code>. A small hook writes a snapshot file; the app reads it. Nothing else.</li>
+<li><b>Zero network.</b> The app makes no network call of its own. No usage endpoint, no price fetch, no update check, no analytics, no crash reports.</li>
+<li><b>Nothing stored outside the Mac.</b> The snapshot, the settings and the computed figures stay on the machine. Nothing is uploaded, nothing is synced.</li>
+<li><b>No Keychain.</b> The app never reads the Claude Code credential item, never holds a token, never asks the user to sign in.</li>
+<li><b>No undocumented endpoint.</b> The app calls no endpoint at all. The consequence is accepted: there is no per model limit bar, because the documented feed does not carry one.</li>
+<li><b>List price equivalent, never spent.</b> Token cost is tokens times the published list prices. On a flat plan that is not money spent, and the label says so.</li>
+<li><b>Mac figures from public calls.</b> Mach, sysctl, IOKit power sources and libproc. Two keys are best effort because Apple does not document them: GPU utilisation and battery health.</li>
+</ul>
+
+<h2 id="pages">4  The pages</h2>
+<ul>
+<li><a href="styleguide.html">Style guide</a>: tokens, type, glyphs, material, the bar grammar, every component live with its states and a usage rule, copy rules, motion, accessibility.</li>
+<li><a href="spec.html">Spec</a>: the product spec for the Swift build. Architecture, modules, the status line hook and snapshot schema, the transcript reader, prices, the pace model, the Mac sampler, notifications, settings, every screen in order, error states, packaging, licence, test plan.</li>
+<li><a href="privacy.html">Privacy</a>: the statement a user reads, every data path named.</li>
+</ul>
+<p class="d">Building, testing and releasing are in the README at the root of the repository. The changes per version are in CHANGELOG.md.</p>
+
+<div class="foot">Overview  Style guide  Spec  Privacy</div>
+</main>
+</div>
+</div>
+<script src="docs.js"></script>
+<script>
+(() => {
+const root = document.querySelector('.r6');
+R6.probe(root);
+const mW = R6.pace('weekly', 61), mF = R6.pace('five', 24);
+document.getElementById('lv-win').innerHTML = R6.windowSection(mW);
+document.getElementById('lv-five').innerHTML = R6.windowSection(mF);
+document.getElementById('lv-pop').innerHTML = R6.popover(0, {weekly:61, five:24}, {sub:0});
+})();
+</script>
+</body>
+</html>

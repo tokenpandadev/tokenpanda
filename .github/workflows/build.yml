@@ -1,0 +1,24 @@
+name: build
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  build:
+    runs-on: macos-latest
+    steps:
+      - uses: actions/checkout@v4
+      - name: Swift version
+        run: swift --version
+      - name: Build
+        run: swift build
+      - name: Test
+        run: |
+          # With only the Command Line Tools selected, swift-testing needs its macro plugin path; Xcode finds it itself.
+          PLUGINS=/Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing
+          if xcode-select -p | grep -q CommandLineTools && [ -d "$PLUGINS" ]; then
+            swift test -Xswiftc -plugin-path -Xswiftc "$PLUGINS"
+          else
+            swift test
+          fi

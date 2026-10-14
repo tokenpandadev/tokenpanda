@@ -1,0 +1,189 @@
+/* docs.css: the component styles under .r6, which the Swift Text module mirrors, then the documentation chrome under .dk. A change to an .r6 rule is a change to the app's grammar and is made in both. */
+.r6{
+  --tint:rgba(25,29,39,.82);
+  --txt:#e0e0e0; --bold:#ededed; --dim:#999999; --dimmer:#888888; --quiet:#505050;
+  --accent:#b1b9f9; --track:#505370; --coral:#d77757; --warn:#ffc107; --box:#373737; --sel:rgb(39,61,76);
+  --magenta:#bd7bcd; --yellow:#c4ac62; --cyan:#7ccbcd; --green:#6caa71; --blue:#6d96b4; --blue2:#67b5ed; --white:#dee5eb;
+  --mono:"SF Mono",ui-monospace,Menlo,monospace;
+  --sf:-apple-system,"SF Pro Text",system-ui,sans-serif;
+  min-height:100vh;color:var(--txt);font:12px/16px var(--mono);-webkit-font-smoothing:antialiased;color-scheme:dark;
+  background:
+    radial-gradient(70% 40% at 18% 12%,rgba(62,84,160,.75),rgba(62,84,160,0) 70%),
+    radial-gradient(55% 45% at 84% 38%,rgba(126,64,140,.55),rgba(126,64,140,0) 70%),
+    radial-gradient(60% 30% at 40% 78%,rgba(38,110,130,.45),rgba(38,110,130,0) 70%),
+    linear-gradient(#171c2e,#0e1120);
+  padding:0 0 80px;
+}
+.r6 *,.r6 *::before,.r6 *::after{box-sizing:border-box}
+.r6 button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer;white-space:pre}
+.r6 :focus-visible{outline:1px solid var(--accent);outline-offset:1px}
+.r6 h1{display:inline;margin:0;font:700 12px/16px var(--mono);color:var(--bold)}
+
+/* the macOS menu bar strip, OS chrome */
+.r6 .osbar{height:24px;display:flex;align-items:center;gap:0;padding:0 14px 0 16px;background:rgba(28,30,38,.86);-webkit-backdrop-filter:blur(30px);backdrop-filter:blur(30px);font:13px/24px var(--sf);color:rgba(255,255,255,.92)}
+.r6 .osbar .app{font-weight:700;margin-right:18px}
+.r6 .osbar .m{margin-right:18px;color:rgba(255,255,255,.88)}
+.r6 .osbar .right{margin-left:auto;display:flex;align-items:center;gap:16px}
+.r6 .osbar svg{display:block;fill:none;stroke:currentColor}
+.r6 .osbar .wifi{width:16px;height:12px;stroke-width:1.6;stroke-linecap:round}
+.r6 .osbar .batt{width:26px;height:12px;stroke-width:1}
+.r6 .osbar .clock{font-variant-numeric:tabular-nums}
+
+/* the menu bar item: SF digits, a 5 cell block bar at 9 px */
+.r6 .mbi{display:inline-flex;align-items:center;gap:5px;height:22px;padding:0 4px;font:400 13px/22px var(--sf);font-variant-numeric:tabular-nums;white-space:pre;color:inherit}
+.r6 .mbi.over{font-weight:600}
+.r6 .mbi.stale{opacity:.5}
+.r6 .mini{position:relative;display:inline-block;height:10px;font:9px/10px var(--mono);vertical-align:0;white-space:pre}
+.r6 .mini .mt{opacity:.28}
+.r6 .mini .mf,.r6 .mini .mk{position:absolute;left:0;top:0}
+.r6 .mini .solid{background:currentColor}
+.r6 .mbi .g{font:12px/22px var(--mono)}
+.r6 .strip{display:inline-flex;align-items:center;height:24px;padding:0 10px;background:rgba(28,30,38,.92);color:rgba(255,255,255,.92);font:13px/24px var(--sf);white-space:pre}
+.r6 .strip.light{background:rgba(236,237,240,.94);color:rgba(0,0,0,.86)}
+
+/* the glass pane, the terminal */
+.r6 .term{margin:40px 40px 0;max-width:1120px;padding:28px 24px 36px;background:var(--tint);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);white-space:pre}
+.r6 .l{min-height:16px}
+.r6 .b{font-weight:700;color:var(--bold)}
+.r6 .d{color:var(--dim)}
+.r6 .dd{color:var(--dimmer)}
+.r6 .q{color:var(--quiet)}
+.r6 .a{color:var(--accent)}
+.r6 .w{color:var(--warn)}
+.r6 .c{color:var(--coral)}
+.r6 .i{font-style:italic}
+.r6 .g{display:inline-block;width:1ch;text-align:left}
+.r6 .rule{color:var(--accent)}
+.r6 .ns{white-space:normal}
+
+/* tab grammar */
+.r6 .tab{display:inline-block;white-space:pre}
+.r6 .tab:hover{color:#ffffff}
+.r6 .tab[aria-pressed="true"],.r6 .tab[aria-selected="true"]{background:var(--accent);color:#000000;font-weight:700}
+.r6 .tab.sub[aria-pressed="true"],.r6 .tab.sub[aria-selected="true"]{background:var(--bold);color:#191d27}
+
+/* block bar from glyphs */
+.r6 .bar{position:relative;display:inline-block;height:var(--bh,12px);margin-top:var(--bt,3px);background:var(--track);vertical-align:top;white-space:pre;line-height:16px}
+.r6 .bar.stale{background:rgba(80,83,112,.35)}
+.r6 .bar.plain{background:none}
+.r6 .bar .fl{display:block;margin-top:calc(-1 * var(--bt,3px))}
+.r6 .bar .tk{position:absolute;top:calc(-1 * var(--bt,3px));color:var(--txt)}
+.r6 .bar.stale .tk{color:var(--dim)}
+
+/* rows */
+.r6 .row{position:relative}
+.r6 .row:hover,.r6 .row.is-hover{background:var(--sel)}
+.r6 .row .fig{position:relative;display:inline-block}
+.r6 .tip{position:absolute;bottom:100%;right:0;margin-bottom:2px;padding:0 1ch;background:var(--box);color:var(--txt);white-space:pre;opacity:0;pointer-events:none}
+.r6 .tip.show{position:static;opacity:1;display:inline-block;pointer-events:auto}
+.r6 .fig:hover .tip,.r6 .fig:focus .tip{opacity:1}
+
+/* grid cells for the wide glyphs */
+.r6 .gc{display:inline-block;width:2ch;text-align:left}
+
+/* checkbox */
+.r6 .cb{display:inline-block;white-space:pre}
+.r6 .srow:hover,.r6 .srow.is-hover{background:var(--sel)}
+
+/* sheet layout */
+.r6 .sec{margin:40px 0 0}
+.r6 .wrap{display:flex;flex-wrap:wrap;gap:24px 56px;align-items:flex-start;margin-top:12px}
+.r6 .t{white-space:pre}
+.r6 .pop{width:380px;padding:0 10px}
+.r6 .cap{color:var(--dim);margin-top:6px}
+.r6 .sw{display:inline-block;width:4ch;height:16px;vertical-align:top}
+.r6 .mat{display:inline-block;width:160px;height:64px;vertical-align:top;position:relative;overflow:hidden;background:
+    radial-gradient(70% 60% at 20% 20%,rgba(62,84,160,.9),rgba(62,84,160,0) 70%),
+    radial-gradient(60% 60% at 85% 70%,rgba(126,64,140,.8),rgba(126,64,140,0) 70%),linear-gradient(#171c2e,#0e1120)}
+.r6 .mat.glass::after{content:"";position:absolute;inset:0;background:var(--tint);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.r6 .mat span{position:absolute;left:1ch;bottom:0;z-index:1;color:var(--dim)}
+
+/* nudge banner, the OS draws it */
+.r6 .nb{width:344px;padding:9px 14px 10px;border-radius:12px;background:rgba(44,46,54,.84);-webkit-backdrop-filter:blur(30px) saturate(1.5);backdrop-filter:blur(30px) saturate(1.5);box-shadow:0 0 0 1px rgba(255,255,255,.09),0 8px 24px rgba(0,0,0,.35);font:400 13px/17px var(--sf);color:rgba(255,255,255,.92);white-space:normal;display:flex;gap:10px}
+.r6 .nb .tx{flex:1;min-width:0}
+.r6 .nb b{display:block;font-weight:600}
+.r6 .nb p{margin:1px 0 0;color:rgba(255,255,255,.72)}
+.r6 .nb time{font-size:11px;color:rgba(255,255,255,.5);margin-top:1px}
+
+/* the popover, from the assembled build */
+.r6 .popover{position:relative;width:380px;padding:12px 10px 10px;border-radius:10px;background:var(--tint);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px);box-shadow:0 0 0 1px rgba(255,255,255,.1),0 12px 32px rgba(0,0,0,.45);white-space:pre}
+.r6 .popover .arrow{position:absolute;top:-6px;left:calc(var(--ax,300px) - 7px);width:14px;height:14px;transform:rotate(45deg);background:rgb(30,34,46);box-shadow:-1px -1px 0 rgba(255,255,255,.1);border-radius:2px 0 0 0}@media (prefers-reduced-motion: no-preference){
+  .r6 .bar.anim .fl{animation:r6fill 240ms ease-out}
+  .r6 .tip{transition:opacity 150ms ease-out}
+}@keyframes r6fill{from{clip-path:inset(0 100% 0 0)}to{clip-path:inset(0 0 0 0)}}
+
+/* documentation chrome: the glass pane with a left nav, prose at SF Mono 13 */
+.dk{padding:0}
+.dk .frame{display:grid;grid-template-columns:200px minmax(0,1fr);min-height:100vh;background:var(--tint);-webkit-backdrop-filter:blur(24px);backdrop-filter:blur(24px)}
+.dk .nav{position:sticky;top:0;align-self:start;height:100vh;overflow:auto;padding:28px 0 28px 24px;white-space:pre;font:12px/16px var(--mono)}
+.dk .nav a{color:var(--txt);text-decoration:none}
+.dk .nav a:hover{color:#ffffff}
+.dk .nav a.tab[aria-current="page"]{background:var(--accent);color:#000000;font-weight:700}
+.dk .nav .d a{color:var(--dim)}
+.dk .nav .d a:hover{color:#ffffff}
+.dk .main{padding:28px 40px 96px 32px;max-width:1040px;font:13px/20px var(--mono);white-space:normal}
+.dk .main .head{white-space:pre-wrap;font:12px/16px var(--mono)}
+.dk .main .rule{white-space:pre;overflow:hidden;color:var(--accent);font:12px/16px var(--mono);margin-bottom:20px}
+.dk .main h2{margin:40px 0 8px;font:700 13px/20px var(--mono);color:var(--bold)}
+.dk .main h3{margin:24px 0 4px;font:700 13px/20px var(--mono);color:var(--txt)}
+.dk .main h2 .d,.dk .main h3 .d{font-weight:400}
+.dk .main p{margin:0 0 12px;max-width:78ch}
+.dk .main p.d,.dk .main p.q{max-width:78ch}
+.dk .main ul,.dk .main ol{margin:0 0 12px;padding-left:3ch;max-width:78ch}
+.dk .main li{margin:0 0 4px}
+.dk .main a{color:var(--accent);text-decoration:none}
+.dk .main a:hover{color:#ffffff;text-decoration:underline}
+.dk .main code{font:inherit;background:var(--box);color:#ffffff;padding:0 .5ch}
+.dk .main pre{margin:0 0 16px;padding:8px 1ch;background:var(--box);color:#ffffff;white-space:pre;overflow:auto;font:12px/16px var(--mono);max-width:100%}
+.dk .main pre code{background:none;padding:0}
+.dk .main table{border-collapse:collapse;margin:0 0 16px;font:12px/16px var(--mono);font-variant-numeric:tabular-nums}
+.dk .main th{color:var(--dim);font-weight:400;text-align:left;padding:0 3ch 4px 0;vertical-align:bottom}
+.dk .main td{padding:0 3ch 4px 0;vertical-align:top;text-align:left}
+.dk .main td.n,.dk .main th.n{text-align:right;white-space:nowrap}
+.dk .main table.nw td,.dk .main table.nw th{white-space:nowrap}
+.dk .main table.nw td:last-child,.dk .main table.nw th:last-child{white-space:normal}
+.dk .main table td:first-child{white-space:nowrap}
+.dk .main .nb{min-height:68px}
+.dk .main .spec{margin:12px 0 20px}
+.dk .main .wrap{margin-top:8px}
+.dk .main .t{font:12px/16px var(--mono)}
+.dk .main .cap{font:12px/16px var(--mono)}
+.dk .main .use{max-width:78ch;margin:4px 0 0}
+.dk .main .use b{font-weight:700;color:var(--bold)}
+.dk .main .verify{color:var(--warn)}
+.dk .main .foot{margin-top:56px;white-space:pre;font:12px/16px var(--mono);color:var(--quiet)}
+.dk .main .cols{display:flex;flex-wrap:wrap;gap:16px 56px;align-items:flex-start}
+.dk .main .cols > *{min-width:0}
+.dk .main .glyphs{font:12px/24px var(--mono)}
+.dk .main .glyphs td{padding-bottom:0}
+.dk .main .glyphs .gl{font-size:12px;white-space:nowrap}
+.dk .main .stage{position:relative;padding:40px 24px 40px;margin:12px 0 20px;max-width:600px;border-radius:4px;background:
+    radial-gradient(70% 40% at 18% 12%,rgba(62,84,160,.75),rgba(62,84,160,0) 70%),
+    radial-gradient(55% 45% at 84% 38%,rgba(126,64,140,.55),rgba(126,64,140,0) 70%),
+    linear-gradient(#171c2e,#0e1120)}
+.dk .main .state{white-space:pre;font:12px/16px var(--mono);margin:0 0 12px}
+.dk .main .rule{overflow:visible;contain:paint}
+
+/* responsive: a box wider than its column scrolls inside itself with a visible edge (docs.js marks it .xs); under 1280 the nav links and the pace switch get a 44 px hit area; under 768 the nav becomes a top strip */
+.dk .main table.xs{display:block;width:fit-content;max-width:100%;overflow-x:auto;outline:1px solid var(--box);padding:8px 1ch 4px}
+.dk .main table.xs td:last-child:not(.n),.dk .main table.xs td:nth-last-child(2):has(+ td.n){min-width:32ch}
+.dk .main .spec.xs,.dk .main .state.xs{overflow-x:auto;outline:1px solid var(--box);padding:8px 1ch}
+.dk .main .stage.xs{overflow-x:auto}
+.dk .main pre{-webkit-overflow-scrolling:touch}@media (max-width:1279px){
+  .dk .nav{white-space:normal}
+  .dk .nav .l{min-height:44px;display:flex;align-items:center;white-space:pre}
+  .dk .nav .l:empty{min-height:16px}
+  .dk .nav a,.dk .main .head > button.tab{position:relative}
+  .dk .nav a::after,.dk .main .head > button.tab::after{content:"";position:absolute;left:0;right:0;top:50%;height:44px;min-width:44px;transform:translateY(-50%)}
+  .dk .main .head:has(> button.tab){padding:14px 0}
+  .dk .main p,.dk .main li,.dk .main .use,.dk .main .head,.dk .main .cap{overflow-wrap:anywhere}
+}@media (max-width:767px){
+  .dk .frame{display:block;min-height:100vh}
+  .dk .nav{position:static;height:auto;overflow:visible;padding:8px 16px 0;display:flex;flex-wrap:wrap;gap:0 1ch;white-space:pre}
+  .dk .nav .l:empty{display:none}
+  .dk .nav .toc{flex:0 0 100%;min-width:0;display:flex;gap:0 2ch;overflow-x:auto;margin-top:4px}
+  .dk .nav .toc.xs{outline:1px solid var(--box);padding:0 1ch}
+  .dk .main{padding:24px 16px 64px}
+  .dk .main .stage{padding:24px 16px}
+  .dk .main .foot{white-space:pre-wrap}
+}

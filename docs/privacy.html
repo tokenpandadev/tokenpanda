@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tokenpanda privacy</title>
+<link rel="stylesheet" href="docs.css">
+<style>@media (prefers-reduced-motion: reduce){.r6 .bar .fl{animation:none}.r6 .tip{transition:none}}</style>
+</head>
+<body style="margin:0;background:#0e1120">
+<div class="r6 dk">
+<div class="frame">
+
+<nav class="nav" aria-label="Documentation">
+<div class="l"><a class="tab" href="index.html"> Overview </a></div>
+<div class="l"><a class="tab" href="styleguide.html"> Style guide </a></div>
+<div class="l"><a class="tab" href="spec.html"> Spec </a></div>
+<div class="l"><a class="tab" href="privacy.html" aria-current="page"> Privacy </a></div>
+<div class="l"></div>
+<div class="toc"><div class="l d"><a href="#short">1  The short version</a></div>
+<div class="l d"><a href="#reads">2  What the app reads</a></div>
+<div class="l d"><a href="#never">3  What it never reads</a></div>
+<div class="l d"><a href="#writes">4  What it writes</a></div>
+<div class="l d"><a href="#network">5  What leaves your Mac</a></div>
+<div class="l d"><a href="#account">6  Your account</a></div>
+<div class="l d"><a href="#hook">7  Hook and settings</a></div>
+<div class="l d"><a href="#check">8  How to check</a></div>
+<div class="l d"><a href="#remove">9  Removing the app</a></div>
+<div class="l d"><a href="#anthropic">10  What Anthropic says</a></div>
+</div></nav>
+
+<main class="main">
+<div class="head"><h1>Privacy</h1><span class="d">  tokenpanda  what it reads, what it keeps, what leaves your Mac  14 October 2026</span></div>
+<div class="head d">the statement a user reads; the same facts the spec is built on</div>
+<div class="rule">▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔</div>
+
+<h2 id="short">1  The short version</h2>
+<p>This app makes no network calls. Usage comes from Claude Code's own status feed on this Mac.</p>
+<p>That is the sentence in the app's Settings, and it is the whole policy. Everything below spells it out: what the app reads, what it keeps, and what leaves your Mac, which is nothing.</p>
+
+<h2 id="reads">2  What the app reads</h2>
+<h3>The status line feed</h3>
+<p>While a Claude Code session is open, Claude Code runs a small script every few seconds and hands it a JSON object. The app installs that script, with your permission, and the script copies the object to a file. The app reads these fields from it and nothing else:</p>
+<ul>
+<li>the two plan windows: how much of the 5 hour window and of the weekly window you have used, in percent, and when each resets</li>
+<li>which session this is (its id), which folder it runs in, which model it uses and at what effort level</li>
+<li>how full the session's context window is, and its running cost at list price, lines added and lines removed, as Claude Code itself reports them</li>
+</ul>
+<p>The object also carries other things, like the path of the session's transcript and cache statistics. The app ignores them. The object contains no password, token or key; it is paths, numbers, model names and ids.</p>
+<h3>The transcripts</h3>
+<p>Claude Code keeps a transcript of each session on your Mac, in plain text, under <code>~/.claude/projects</code>, for 30 days by default. The app reads those files to count tokens. From each line it takes only: the line type, the time, the message id, the request id, whether the line came from a subagent, the session id, the working directory (<code>cwd</code>), the model id, and the five token counts. It does not read what you wrote, what Claude answered, which files were opened or what the tools returned. Those parts of each line are dropped before anything is kept.</p>
+<p>The project name you see is the last folder of that working directory; when a line carries none, it is the last part of the project folder's name, which Claude Code builds from the same path. Only that last folder name is kept, in memory. The session you see is the file's name, which is an id.</p>
+<h3>Your Mac</h3>
+<p>The second tab shows CPU, GPU, memory, battery and the busiest processes. These come from the same public system calls Activity Monitor uses. They are sampled every 2 seconds while the popover is open and every 10 seconds while it is closed, kept in memory, and never written to disk.</p>
+
+<h2 id="never">3  What it never reads</h2>
+<p>The folder that holds the transcripts also holds things that are not transcripts. The app never opens them. This is a rule in the code and a test in the test suite, not a promise:</p>
+<ul>
+<li><code>~/.claude/projects/&lt;project&gt;/memory/</code>: personal notes Claude Code keeps across sessions</li>
+<li><code>~/.claude/projects/&lt;project&gt;/&lt;session&gt;/tool-results/</code>: tool outputs with file contents, images and PDFs</li>
+<li>title files and error files next to a transcript, and the subagent metadata files</li>
+<li>anything else in <code>~/.claude</code>: history, stats caches, sessions, state, uploads, the daemon, the paste cache, file history</li>
+<li>your <code>settings.json</code>, except the one status line key the app edits when you ask it to (section 7)</li>
+<li>inside a transcript line: the message content, the tool results, attachments, snapshots and the account ids</li>
+</ul>
+<p>Two things Claude Code shows in its own usage screen are not in the feed and not in the transcripts, so the app does not show them and does not try to work them out: the breakdown of a session's context by category (messages, system tools, memory files, skills, MCP servers) and the token count per MCP tool. Those are computed inside Claude Code.</p>
+<p>The app never reads the Keychain. It never reads the Claude Code credential item, a token, a cookie or a session key. It never asks you to sign in.</p>
+
+<h2 id="writes">4  What it writes</h2>
+<ul>
+<li><code>~/Library/Application Support/dev.tokenpanda.app/sessions/&lt;session id&gt;.json</code>: the latest status line object of each open session, overwritten every few seconds and deleted a minute after the session stops feeding</li>
+<li><code>~/Library/Application Support/dev.tokenpanda.app/hook.sh</code>: the status line script</li>
+<li><code>~/Library/Application Support/dev.tokenpanda.app/statusline-before.json</code>: your <code>statusLine</code> entry as it was before the install, so removing the hook can put it back exactly; deleted on removal</li>
+<li><code>~/Library/Application Support/dev.tokenpanda.app/limits.json</code>: the last two plan windows (used percent and reset time) and the time they were read, so the figures outlive the session files; no path, no model, no session id</li>
+<li><code>~/Library/Application Support/dev.tokenpanda.app/weeks.json</code>: four small records of past weekly windows, for the week over week rows</li>
+<li>your preferences (three switches and two timestamps the nudges use) in the app's preferences file under <code>~/Library/Preferences</code></li>
+</ul>
+<p>No log file. No cache of transcripts. No copy of anything you wrote. If installing or removing the hook fails, the error is shown in Settings and written to the macOS unified log, with the message marked private.</p>
+
+<h2 id="network">5  What leaves your Mac</h2>
+<p>Nothing. The app has no network code. It does not check for updates, does not fetch prices, does not send crash reports, does not send usage statistics, and does not call any Anthropic endpoint. The prices it uses for the "list price equivalent" figure are a table inside the app, updated with releases.</p>
+<p>Updates come from the project's GitHub releases or from Homebrew when you ask for them.</p>
+
+<h2 id="account">6  Your account</h2>
+<p>The app has no account, no sign in and no access to yours. The plan percentages it shows are the ones Claude Code already knows and hands to its status line. They cover your whole account, so use of Claude on the web or in the apps moves them too; the app says so when it shows figures from a past session.</p>
+
+<h2 id="hook">7  The hook and your settings</h2>
+<p>To get the feed, Claude Code has to be told to run the app's script. That is one entry, <code>statusLine</code>, in <code>~/.claude/settings.json</code>. The app does not write it on its own. It edits the file only when you click "Install the status line hook" on the Claude tab or "Install the status line entry" in Settings. If you already have a status line, the app keeps it: the script passes the same data on to your command and shows its output, so your status line looks the same as before. Inside your <code>statusLine</code> entry only <code>type</code> and <code>command</code> change; other keys such as <code>padding</code> or your own <code>refreshInterval</code> stay, and <code>refreshInterval</code> 5 is added only when there was none.</p>
+<p>"Remove the status line entry" in Settings undoes it with one click: your previous <code>statusLine</code> entry goes back exactly as it was, or the key is removed if there was none. If you changed the entry yourself after installing, removing the hook leaves your entry alone. Either way the script, the saved entry and the sessions folder are deleted.</p>
+<p>The file is read and written whole by the macOS JSON writer, so its indentation and the order of its keys may change when the app writes it. In content, only the <code>statusLine</code> key differs. The app otherwise only checks the file's modification time, to notice when the entry changed.</p>
+
+<h2 id="check">8  How to check</h2>
+<ul>
+<li>The source is public. Search it for <code>URLSession</code>, <code>Network</code>, <code>http</code> or <code>Security</code>: there are none.</li>
+<li>Run a network monitor such as Little Snitch, or <code>nettop</code> in Terminal filtered to the app, for an hour: zero connections.</li>
+<li>Open the sessions folder in Application Support and read a snapshot file: it is the status line object Claude Code produced, as is.</li>
+<li>Open <code>~/.claude/settings.json</code> and read the <code>statusLine</code> entry: one script path and a refresh interval.</li>
+</ul>
+
+<h2 id="remove">9  Removing the app</h2>
+<ol>
+<li>In the app's Settings, click "Remove the status line entry". Or remove the <code>statusLine</code> entry from <code>~/.claude/settings.json</code> yourself.</li>
+<li>Quit the app and move it to the Bin, or <code>brew uninstall tokenpanda</code>.</li>
+<li>Delete <code>~/Library/Application Support/dev.tokenpanda.app</code> and <code>~/Library/Preferences/dev.tokenpanda.app.plist</code>.</li>
+</ol>
+<p>Nothing else was created.</p>
+
+<h2 id="anthropic">10  What Anthropic says</h2>
+<p>Anthropic's documentation describes the status line feed as input for any shell script you configure. Its legal page bars third party apps from collecting, storing or passing on Claude.ai credentials or session tokens; this app does none of that. Anthropic has written nothing either way about a local tool reading the transcripts on your own Mac. That is silence, not permission, and this page says so rather than claiming more.</p>
+
+<div class="foot">Overview  Style guide  Spec  Privacy</div>
+</main>
+</div>
+</div>
+<script src="docs.js"></script>
+</body>
+</html>

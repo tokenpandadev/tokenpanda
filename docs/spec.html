@@ -1,0 +1,476 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>tokenpanda spec</title>
+<link rel="stylesheet" href="docs.css">
+<style>@media (prefers-reduced-motion: reduce){.r6 .bar .fl{animation:none}.r6 .tip{transition:none}}</style>
+</head>
+<body style="margin:0;background:#0e1120">
+<div class="r6 dk">
+<div class="frame">
+
+<nav class="nav" aria-label="Documentation">
+<div class="l"><a class="tab" href="index.html"> Overview </a></div>
+<div class="l"><a class="tab" href="styleguide.html"> Style guide </a></div>
+<div class="l"><a class="tab" href="spec.html" aria-current="page"> Spec </a></div>
+<div class="l"><a class="tab" href="privacy.html"> Privacy </a></div>
+<div class="l"></div>
+<div class="toc"><div class="l d"><a href="#rules">0  The rules</a></div>
+<div class="l d"><a href="#arch">1  Architecture</a></div>
+<div class="l d"><a href="#modules">2  Modules</a></div>
+<div class="l d"><a href="#hook">3  Status line hook</a></div>
+<div class="l d"><a href="#sessions">4  Open sessions</a></div>
+<div class="l d"><a href="#transcripts">5  Transcript reader</a></div>
+<div class="l d"><a href="#prices">6  Price table</a></div>
+<div class="l d"><a href="#pace">7  Pace model</a></div>
+<div class="l d"><a href="#mac">8  Mac sampler</a></div>
+<div class="l d"><a href="#notifications">9  Notifications</a></div>
+<div class="l d"><a href="#settings">10  Settings</a></div>
+<div class="l d"><a href="#item">11  Menu bar item</a></div>
+<div class="l d"><a href="#screens">12  Screens</a></div>
+<div class="l d"><a href="#privacy">13  Privacy statement</a></div>
+<div class="l d"><a href="#errors">14  Error states</a></div>
+<div class="l d"><a href="#logging">15  Logging</a></div>
+<div class="l d"><a href="#updates">16  Updates</a></div>
+<div class="l d"><a href="#packaging">17  Packaging</a></div>
+<div class="l d"><a href="#licence">18  Licence</a></div>
+<div class="l d"><a href="#tests">19  Test plan</a></div>
+</div></nav>
+
+<main class="main">
+<div class="head"><h1>Spec</h1><span class="d">  tokenpanda  product spec for the Swift build  14 October 2026</span></div>
+<div class="head d">facts from the research and the verification run on a Mac, October 2026  <span class="verify">to be verified</span> marks what no source settles</div>
+<div class="rule">▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔▔</div>
+
+<h2 id="rules">0  The rules</h2>
+<ul>
+<li>Plan limits come only from the documented Claude Code status line feed. Tokens come only from the local transcripts. Mac figures come only from public macOS calls.</li>
+<li>No Keychain item, credential, token or undocumented endpoint is read, ever, not even behind an opt in. Anthropic's legal page bars developers from collecting, storing or intermediating Claude.ai credentials or session tokens, verbatim, and reserves enforcement without notice.</li>
+<li>No network call of any kind. No analytics, crash reports, update check or price fetch.</li>
+<li>The product name does not contain "Claude", "Claude Code" or "Anthropic": the legal page bars their use "as part of your own product, feature, or company name". It allows saying in plain text that something runs Claude Code, so the UI says "Claude Code" as a fact.</li>
+<li>Anthropic's terms say nothing either way about a local tool reading the transcripts or the status line feed; the status line documentation describes the feed as input for "any shell script you configure". That is silence, not permission, and the README says so.</li>
+<li>The app reads only the fields named in this spec and drops the rest of every line. What it must never read is listed in section 5 and on the privacy page.</li>
+</ul>
+
+<h2 id="arch">1  Architecture</h2>
+<ul>
+<li><b>Swift Package Manager only.</b> No Xcode project. A package with <code>swift-tools-version 6.0</code>, platform macOS 14, seven library targets, one executable target <code>tokenpanda</code> linking AppKit, IOKit and UserNotifications, and one test target <code>tokenpandaTests</code>. Proven on the build Mac (Command Line Tools only, Swift 6.4, SDK 27.0): a status item plus popover package builds in 32 s with <code>swift build -c release</code>; SwiftPM signs the product ad hoc by itself. <code>xcodebuild</code> is not needed and not available there.</li>
+<li><b>Minimum macOS 14.</b> The widest floor among the AI usage meters; the package declares it. Apple silicon first; a universal binary is a release option, untested until someone tests it.</li>
+<li><b>AppKit status item.</b> <code>NSStatusBar.system.statusItem(withLength: .variableLength)</code> with a custom <code>NSView</code> in the item's button that draws the digits and the 5 cell bar and marks itself dirty when a value arrives; no redraw timer. SwiftUI's MenuBarExtra is not used: no custom view in the item, no fade on dismiss, no persisted selection.</li>
+<li><b>NSPopover</b> anchored to the item, 380 by 420 points, with an <code>NSVisualEffectView</code> for the glass and an <code>NSHostingController</code> root; the content is SwiftUI text views rendering the lines the Text module produces, or an AppKit text view, the builder's choice. The popover is one monospaced layout of lines, not controls stacked in a grid.</li>
+<li><b>Activation policy accessory</b> (<code>NSApp.setActivationPolicy(.accessory)</code>) and <code>LSUIElement</code> true in Info.plist: no Dock icon, no app menu.</li>
+<li><b>Not sandboxed.</b> The transcript reader needs <code>~/.claude</code>, the process list needs libproc, and the hook lives in Application Support. The entitlements file is empty.</li>
+<li><b>No dependencies</b> outside the SDK.</li>
+<li><b>Swift 6 language mode</b> with strict concurrency: the samplers and readers are actors, the UI state is one main actor observable.</li>
+</ul>
+
+<h2 id="modules">2  Modules</h2>
+<table>
+<tr><th>Module</th><th>Owns</th><th>Talks to</th></tr>
+<tr><td>App</td><td>entry point, the status item, the popover, keyboard, the main actor state</td><td>everything</td></tr>
+<tr><td>Feed</td><td>reads the snapshot files the hook writes, one per session, watches the folder, computes staleness and the open sessions list</td><td>Pace, Sessions</td></tr>
+<tr><td>Hook</td><td>the hook script as a resource, installing the statusLine entry with consent, chaining an existing command, removing it and restoring the entry from before</td><td>Feed</td></tr>
+<tr><td>Transcripts</td><td>finds and streams the JSONL files, dedupes, aggregates by window, model, project, session, agent share</td><td>Prices</td></tr>
+<tr><td>Prices</td><td>the bundled five column price table, cost per message</td><td>Transcripts, Sessions</td></tr>
+<tr><td>Pace</td><td>window length by key name, status, projection, allowance, countdown</td><td>Feed, UI</td></tr>
+<tr><td>MacSampler</td><td>CPU, memory, pressure, swap, GPU, battery, processes</td><td>UI, Notifications (the warning rule)</td></tr>
+<tr><td>Notifications</td><td>the two nudges, once per window</td><td>Pace, Settings</td></tr>
+<tr><td>Settings</td><td>UserDefaults keys</td><td>everything that reads a setting</td></tr>
+<tr><td>Text</td><td>the line renderer: bars from glyphs, columns, colours; one function per component of the style guide; golden tested</td><td>UI</td></tr>
+</table>
+
+<h2 id="hook">3  The status line hook</h2>
+<p>The only source of plan percentages, verified on a Mac on 2026-10-13 against the documentation and a live capture.</p>
+<h3>How Claude Code runs it</h3>
+<ul>
+<li>Configured under the <code>statusLine</code> key of <code>~/.claude/settings.json</code>: <code>type</code> is <code>"command"</code>, <code>command</code> is a script path or an inline shell command, and the optional <code>refreshInterval</code> re-runs the command every N seconds (minimum 1) in addition to the events.</li>
+<li>The script runs once when a session starts or resumes, then after each assistant message, after <code>/compact</code>, on permission mode and vim mode changes, when the command setting changes, when a timer elapses, and when a rate limit window in the last data reaches its <code>resets_at</code>. Updates are debounced at 300 ms; an in-flight script is cancelled when a new update triggers.</li>
+<li>The first call of a session never carries <code>rate_limits</code>; every later call does (38 of 38 in the capture). With <code>refreshInterval</code> the timer fires while the session sits idle too. Between sessions the feed stops.</li>
+<li>The feed reflects the account, not the one session: with two sessions open, both report the same account windows and the values move together.</li>
+<li>Per session override for testing: <code>claude --settings '{"statusLine":{"type":"command","command":"/path/hook.sh"}}'</code> changes nothing on disk.</li>
+</ul>
+<h3>The fields the app reads</h3>
+<table class="nw">
+<tr><th>Field</th><th>Type</th><th>Meaning</th></tr>
+<tr><td>rate_limits.five_hour.used_percentage</td><td>number 0 to 100</td><td>the 5h window; the doc example shows 23.5, the capture showed integers, so parse as Double</td></tr>
+<tr><td>rate_limits.five_hour.resets_at</td><td>Unix epoch seconds</td><td>when the 5h window resets</td></tr>
+<tr><td>rate_limits.seven_day.used_percentage</td><td>number 0 to 100</td><td>the weekly window, all models</td></tr>
+<tr><td>rate_limits.seven_day.resets_at</td><td>Unix epoch seconds</td><td>when the weekly window resets</td></tr>
+<tr><td>session_id</td><td>string</td><td>names the per session snapshot file</td></tr>
+<tr><td>workspace.project_dir</td><td>path</td><td>the open session's project, shown as its last path segment</td></tr>
+<tr><td>model.display_name</td><td>string</td><td>the open session's model</td></tr>
+<tr><td>effort.level</td><td>string</td><td>the open session's effort, in the row's tooltip</td></tr>
+<tr><td>context_window.context_window_size, used_percentage, current_usage</td><td>numbers</td><td>the open session's context bar and "405.6k of 1M"; current_usage is the four token counts of the last response and may be null on the first call</td></tr>
+<tr><td>cost.total_cost_usd, total_lines_added, total_lines_removed</td><td>numbers</td><td>the open session's tooltip: list price equivalent, lines added and removed. The doc says the cost is "computed client-side at list price"; the label stays list price equivalent</td></tr>
+</table>
+<p>Documented on the same feed and not read: <code>cwd</code>, <code>workspace.*</code> beyond project_dir, <code>transcript_path</code>, <code>prompt_id</code>, <code>session_name</code>, <code>version</code>, <code>output_style</code>, <code>prompt_cache.*</code>, <code>rate_limits.spend_limit.*</code> (a gateway figure, not a Max plan one), <code>fast_mode</code>, <code>thinking</code>, <code>exceeds_200k_tokens</code>, <code>vim</code>, <code>agent</code>, <code>pr</code>, <code>worktree</code>. One undocumented field, <code>scratchpad_dir</code>, appears and is ignored, as is any other key the parser does not know. The feed carries nothing that looks like a credential: paths, numbers, model names and UUIDs.</p>
+<p>From the documentation, verbatim: "rate_limits: appears only for claude.ai Pro and Max subscribers, or behind a Claude apps gateway that sets a spend limit for you, and only after the first API response in the session. Each window (five_hour, seven_day, spend_limit) may be independently absent, and Claude Code drops a window once its resets_at time passes." There is no per model field and no plan tier field; the popover carries no tier badge.</p>
+<h3>The hook script</h3>
+<p>One job: copy stdin to a snapshot file, atomically, then hand the same input to the status line command the user had before, if any. It parses nothing, so it needs no jq, no python, nothing but sh.</p>
+<pre>#!/bin/sh
+# The status line hook. Copies the feed Claude Code hands it to one file per session, atomically,
+# then hands the same input to the status line command that was configured before, if any.
+# It parses nothing and needs nothing but sh. The app fills in DIR and PREV at install time.
+DIR="__DIR__"                 # filled in at install: the sessions folder in Application Support
+PREV='__PREV__'               # filled in at install: the previous statusLine command, or empty
+input=$(cat)
+sid=$(printf '%s' "$input" | sed -n 's/.*"session_id":"\([0-9a-fA-F-]*\)".*/\1/p' | head -n 1)
+mkdir -p "$DIR"
+if [ -n "$sid" ]; then
+  printf '%s' "$input" &gt; "$DIR/$sid.json.tmp" &amp;&amp; mv -f "$DIR/$sid.json.tmp" "$DIR/$sid.json"
+else
+  printf '%s' "$input" &gt; "$DIR/latest.json.tmp" &amp;&amp; mv -f "$DIR/latest.json.tmp" "$DIR/latest.json"
+fi
+if [ -n "$PREV" ]; then printf '%s' "$input" | sh -c "$PREV"; fi
+exit 0</pre>
+<ul>
+<li><code>refreshInterval</code> is set to 5, when the user's entry has none of its own, so the open sessions list and the reset rollover stay current while a session idles; the capture ran at 2 s with no visible cost. The script prints nothing of its own, so a user without a status line sees nothing new, and a user with one sees it unchanged.</li>
+<li>The snapshot is the whole feed JSON as received. The app reads only the fields in the table above. The file is overwritten on every call and deleted by the app 60 s after its last write; the folder is removed on uninstall.</li>
+<li>Installing means editing the user's <code>~/.claude/settings.json</code>. The app does this only on an explicit click, on "Install the status line hook" on the Claude tab or "Install the status line entry" in Settings. It keeps a previous command by chaining it, keeps the other keys of an existing <code>statusLine</code> object (<code>padding</code>, the user's <code>refreshInterval</code>), adds <code>refreshInterval</code> 5 only when there is none, and saves the object as it was to <code>statusline-before.json</code> in Application Support. The file is parsed, the <code>statusLine</code> key replaced, and the whole file written back by <code>JSONSerialization</code> pretty printed with slashes unescaped: indentation and key order may change, the content of every other key does not.</li>
+<li>Removing is the Settings row "Remove the status line entry", one explicit click. While the entry is still the app's, the saved object goes back exactly as it was, or the key is removed when there was none; an entry the user changed in the meantime is left alone. The script, the saved object and the sessions folder are deleted. <code>settings.json</code> is otherwise off limits; the app reads its modification time each feed tick and reads the file again only when that time moves.</li>
+<li>An install or remove error is shown under the Settings row and written to the unified log, the message marked private.</li>
+<li>The <code>session_id</code> extraction above assumes the key appears as <code>"session_id":"…"</code> without whitespace, as in the capture; the installer verifies it on the first feed and falls back to a single <code>latest.json</code> if the pattern does not match.</li>
+</ul>
+<h3>Staleness</h3>
+<ul>
+<li>The newest snapshot file sets the windows. Its modification time is the snapshot time, shown as "Usage as of HH:MM, last Claude Code session" in the header when no session has fed in the last 60 s; while one has, the header says "Usage live".</li>
+<li>A snapshot younger than one hour: live. Pace lines are computed.</li>
+<li>Older than one hour: stale. The bar drops to the track colour, the percent and tick go dim, "as of HH:MM" replaces the pace lines, the menu bar item dims to 50%, and the Claude tab adds "Limits are shared across Claude and Claude Code, so use elsewhere moves these figures." Nothing is projected from old data. Claude Code itself keeps a 60 minute last known usage when its own request fails; the hour matches it.</li>
+<li>A window whose <code>resets_at</code> has passed while stale is shown as the stale form with "reset passed HH:MM" in place of the reset line, because the window has rolled and the feed will carry the new one at the next session.</li>
+<li>A snapshot without <code>rate_limits</code> (the first call of a session) never replaces the windows; the app keeps the previous values and waits for the next call.</li>
+</ul>
+<h3>Window length</h3>
+<p>The feed names its windows and gives <code>resets_at</code>, not a length. The length comes from the key name: <code>five_hour</code> is 5 h, <code>seven_day</code> is 168 h. The start is <code>resets_at</code> minus that length. The app checks the length against the observed distance between two consecutive <code>resets_at</code> values of the same key once it has seen two, and if they disagree, or if a key it does not know appears, it shows the window's percent with "unknown window" in place of the pace lines and never guesses.</p>
+
+<h2 id="sessions">4  Open sessions</h2>
+<p>Every running Claude Code session fires its own feed, so the app knows which sessions are open. One snapshot file per <code>session_id</code> (section 3). A session is open when its file was written in the last 10 s; it leaves the list 60 s after its last write and its file is deleted then.</p>
+<ul>
+<li>Section "Open sessions" on the Claude tab, after the two windows. One entry per open session: the project folder's last path segment in bold, the model name dim, the context figure "405.6k of 1M" dim at the right; under it a 36 cell bar of <code>context_window.used_percentage</code> with " 41% used". No tick: the context is a share, not a time window.</li>
+<li>The figure's tooltip: "USD 38.20 list price equivalent  112 added  9 removed", from <code>cost.total_cost_usd</code>, <code>total_lines_added</code>, <code>total_lines_removed</code>; the effort level is appended when present.</li>
+<li>The context figure is <code>current_usage</code>'s four counts summed, formatted as k or M, over <code>context_window_size</code> formatted as k or M ("1M"). When <code>current_usage</code> is null (first call), the entry shows the project and model and an empty bar with "waiting for the first reply".</li>
+<li>Sorted by context used, largest first; at most five, then "and N more" dim.</li>
+<li>No open session: the section is omitted. Stale: omitted.</li>
+</ul>
+<p><b>Not available by the rules and never drawn:</b> the context breakdown by category (messages, system tools, memory files, skills, MCP) and the per MCP tool token counts that Claude Code shows in its own usage screen. Those are computed inside Claude Code and are in neither the feed nor the transcripts.</p>
+<div class="spec"><div class="wrap"><div class="t pop"><div id="s-open"></div><div class="cap">the sample: two open sessions</div></div></div></div>
+
+<h2 id="transcripts">5  The transcript reader</h2>
+<h3>Paths</h3>
+<ul>
+<li><code>~/.claude/projects/&lt;project&gt;/&lt;session&gt;.jsonl</code> for a session; <code>~/.claude/projects/&lt;project&gt;/&lt;session&gt;/subagents/agent-&lt;id&gt;.jsonl</code> for its subagents (a sibling <code>agent-&lt;id&gt;.meta.json</code> is not read). The project folder is the absolute working directory with every slash replaced by a dash. The session id is the file name without <code>.jsonl</code>; every line inside carries <code>sessionId</code> equal to it.</li>
+<li>Also <code>~/.config/claude/projects</code>, and the directories in <code>CLAUDE_CONFIG_DIR</code> when set (ccusage reads these; comma separated).</li>
+<li>Only <code>*.jsonl</code> at depth 1 under a project and under <code>subagents/</code>. Files modified in the last 32 days; the windows need 30.</li>
+<li>Documented retention: "Claude Code clients store session transcripts locally in plaintext under ~/.claude/projects/ for 30 days by default to enable session resumption. Adjust the period with cleanupPeriodDays." So the 30 day figure depends on that setting. No published schema; one session file can mix Claude Code versions (2.1.278 to 2.1.294 in one file); the parser skips any line it cannot read.</li>
+<li>Streaming, line by line: one file on the build Mac was 371 MB and 40483 lines. Never load a whole file.</li>
+</ul>
+<h3>Fields read per line, and nothing else</h3>
+<table>
+<tr><th>Field</th><th>Use</th></tr>
+<tr><td>type</td><td>only <code>"assistant"</code> lines count; the other types seen (user, system, attachment, file-history-snapshot, cost-state, ai-title and more) are skipped unread</td></tr>
+<tr><td>timestamp</td><td>ISO 8601 UTC with milliseconds, <code>2026-10-13T14:14:25.753Z</code>; sets the window</td></tr>
+<tr><td>message.id</td><td>the dedupe key, <code>msg_…</code></td></tr>
+<tr><td>requestId</td><td><code>req_…</code>; kept for the cross check</td></tr>
+<tr><td>isSidechain</td><td>true on subagent lines; false or absent on main lines</td></tr>
+<tr><td>sessionId</td><td>the session</td></tr>
+<tr><td>cwd</td><td>the working directory; its last path segment is the project name, kept in memory only. Without it the project folder's last dash segment is used</td></tr>
+<tr><td>message.model</td><td>the model id; <code>&lt;synthetic&gt;</code> lines are skipped</td></tr>
+<tr><td>message.usage.input_tokens, output_tokens, cache_read_input_tokens, cache_creation_input_tokens</td><td>the four counts; every assistant line in the files read had a usage object</td></tr>
+<tr><td>message.usage.cache_creation.ephemeral_5m_input_tokens, ephemeral_1h_input_tokens</td><td>the cache write split, for the two write prices</td></tr>
+</table>
+<p>The parser decodes these keys and drops the rest of the line. It never reads <code>message.content</code>, <code>toolUseResult</code>, <code>attachment</code>, <code>snapshot</code>, or the account keys <code>accountUuid</code>, <code>ownerAccountUuid</code>, <code>ownerOrganizationUuid</code>, <code>bridgeSessionId</code>. The usage object's other keys (thinking tokens, server tool use, service tier, speed, iterations) are not used.</p>
+<h3>What the app must never open</h3>
+<ul>
+<li><code>~/.claude/projects/&lt;project&gt;/memory/</code>: personal notes in Markdown. Not transcripts.</li>
+<li><code>~/.claude/projects/&lt;project&gt;/&lt;session&gt;/tool-results/</code>: tool outputs and hook output with file contents, images and PDFs.</li>
+<li><code>&lt;session&gt;/custom-title.json</code>, <code>auto-mode-classifier-error.txt</code>, the <code>agent-&lt;id&gt;.meta.json</code> files.</li>
+<li>Elsewhere in <code>~/.claude</code>, by name: <code>history.jsonl</code>, <code>stats-cache.json</code>, <code>sessions/</code>, <code>state/</code>, <code>uploads/</code>, <code>daemon/</code>, <code>paste-cache/</code>, <code>file-history/</code>, and <code>settings.json</code> except the one <code>statusLine</code> key the installer edits with consent.</li>
+</ul>
+<p>The reader enumerates only the two patterns in "Paths" and never walks a directory recursively.</p>
+<h3>Dedupe</h3>
+<p>Claude Code writes one assistant line per content block (thinking, text, tool use), each carrying the same <code>message.id</code> and the same usage. On the build Mac: 5926 assistant lines for 3679 distinct ids, one id up to eleven times; the naive sum of <code>output_tokens</code> was 2.45 times the true figure. Rule: keep the last line per <code>message.id</code>; the usage is identical across repeats. <code>message.id</code> and <code>requestId</code> are one to one (3679 of each), so the request id is a cross check only.</p>
+<h3>Reading cadence</h3>
+<ul>
+<li>Full pass on launch and every 300 s. Files modified since the last pass are read from their last byte offset every 10 s while the popover is open.</li>
+<li>On an actor off the main thread; the UI gets a finished aggregate.</li>
+</ul>
+<h3>Aggregation</h3>
+<table>
+<tr><th>Window</th><th>Rule</th></tr>
+<tr><td>today</td><td>since local midnight</td></tr>
+<tr><td>7 days</td><td>the last 7 by 24 hours</td></tr>
+<tr><td>30 days</td><td>the last 30 by 24 hours, capped by what <code>cleanupPeriodDays</code> left on disk</td></tr>
+</table>
+<ul>
+<li><b>By model</b>: <code>message.model</code>, shown by family and version: <code>claude-fable-5-1</code> as "Fable 5.1", <code>claude-opus-5-5</code> as "Opus 5.5", <code>claude-opus-5</code> as "Opus 5", <code>claude-haiku-4-5-20251001</code> as "Haiku 4.5" (ids seen on the build Mac). <span class="verify">to be verified:</span> the Sonnet 5.5 id string, which did not appear in the files read. An unknown id is shown as is.</li>
+<li><b>By project</b>: the last path segment of the line's <code>cwd</code>; when a line has none, the project folder's last dash segment.</li>
+<li><b>By session</b>: the file name, today only. <span class="verify">to be verified:</span> a display name. The feed carries <code>session_name</code> and the transcript has <code>ai-title</code> lines and <code>custom-title.json</code>; reading any of them is a privacy decision not yet made, so the first version shows the id's first eight characters.</li>
+<li><b>Agent share</b>: tokens from lines whose file path contains <code>/subagents/</code> or whose <code>isSidechain</code> is true, over all tokens in the window, 7 days: "[44% by subagents]".</li>
+<li><b>Totals</b>: tokens today, 7 days, 30 days; list price equivalent 7 days.</li>
+<li><b>Week over week</b>: used at reset or at the limit for the last four weekly windows. The feed is the only source of the used percentage, so the app keeps the last snapshot's weekly values per window (four small records in Application Support) and the time the window first reported 100%, if it did. <span class="verify">to be verified:</span> whether a window at the limit reports 100 or is dropped; until then "hit" means the last value seen in that window was 100.</li>
+<li><b>Cross check</b>: the transcript's <code>cost-state</code> lines hold Claude Code's own running totals per model. They are undocumented and are used in a test to compare against the reader's sums, never as the source.</li>
+</ul>
+
+<h2 id="prices">6  The price table</h2>
+<p>Bundled, never fetched. Source: <a href="https://platform.claude.com/docs/en/about-claude/pricing">platform.claude.com/docs/en/about-claude/pricing</a>, read 2026-10-13 (the page shows no revision date). USD per million tokens. Five columns, because the cache read multiplier differs per model (0.025x the base input for Fable 5.1, 0.05x for Opus 5.5 and Sonnet 5.5, 0.1x for the others), so a formula would be wrong. Keyed by model id prefix. Updated by hand with a release whenever a model ships; the read date is shown in Settings under "List price equivalent".</p>
+<table>
+<tr><th>Model</th><th>Id prefix</th><th class="n">Input</th><th class="n">5m cache write</th><th class="n">1h cache write</th><th class="n">Cache read</th><th class="n">Output</th></tr>
+<tr><td>Fable 5.1</td><td>claude-fable-5-1</td><td class="n">10</td><td class="n">12.50</td><td class="n">20</td><td class="n">0.25</td><td class="n">50</td></tr>
+<tr><td>Opus 5.5</td><td>claude-opus-5-5</td><td class="n">4</td><td class="n">5</td><td class="n">8</td><td class="n">0.20</td><td class="n">20</td></tr>
+<tr><td>Opus 5</td><td>claude-opus-5</td><td class="n">5</td><td class="n">6.25</td><td class="n">10</td><td class="n">0.50</td><td class="n">25</td></tr>
+<tr><td>Opus 4.8</td><td><span class="verify">to be verified</span></td><td class="n">5</td><td class="n">6.25</td><td class="n">10</td><td class="n">0.50</td><td class="n">25</td></tr>
+<tr><td>Sonnet 5.5</td><td><span class="verify">to be verified</span></td><td class="n">2</td><td class="n">2.50</td><td class="n">4</td><td class="n">0.10</td><td class="n">10</td></tr>
+<tr><td>Sonnet 5</td><td><span class="verify">to be verified</span></td><td class="n">2</td><td class="n">2.50</td><td class="n">4</td><td class="n">0.20</td><td class="n">10</td></tr>
+<tr><td>Haiku 5.5, prompts up to 100k tokens</td><td><span class="verify">to be verified</span></td><td class="n">0.10</td><td class="n">0.125</td><td class="n">0.20</td><td class="n">0.01</td><td class="n">0.50</td></tr>
+<tr><td>Haiku 5.5, prompts over 100k tokens</td><td>same id, by input size</td><td class="n">0.50</td><td class="n">0.625</td><td class="n">1</td><td class="n">0.05</td><td class="n">2.50</td></tr>
+<tr><td>Haiku 4.5</td><td>claude-haiku-4-5</td><td class="n">1</td><td class="n">1.25</td><td class="n">2</td><td class="n">0.10</td><td class="n">5</td></tr>
+</table>
+<p>Cost of one message: input times input price, plus output times output price, plus cache read times cache read price, plus the 5m cache write share times the 5m price and the 1h share times the 1h price (when the split is absent, all cache write at the 5m price). A model id without a row is counted in tokens and skipped in cost; the chip then says "[list price equivalent  USD 1,140  one model unpriced]". The Haiku 5.5 tier is chosen per message by input tokens.</p>
+<p>The figure is always labelled "list price equivalent": what the tokens would cost at list prices, not money spent; the user is on a flat plan. The word "spent" does not appear in the app.</p>
+
+<h2 id="pace">7  The pace model</h2>
+<p>Four inputs per window: used percentage U, window start S (resets_at minus the length named by the key), reset R, now T.</p>
+<pre>elapsed    = T - S                       (hours)
+remaining  = R - T                       (hours)
+E          = elapsed / (R - S) × 100     (elapsed share, percent)
+
+status     = Over pace  when U &gt; E + 5
+             Ahead      when U &lt; E - 5
+             On pace    otherwise
+
+rate       = U / elapsed                 (percent per hour)
+to_limit   = (100 - U) / rate            (hours)
+projection = if to_limit &lt; remaining:  "limit " + clock(T + to_limit) + " at this rate"
+             else:                      round(U + rate × remaining) + "% by reset at this rate"
+allowance  = (100 - U) / remaining       (percent per hour) + "% an hour left"
+countdown  = remaining as "in Nd Nh" or "in Nh Nm"</pre>
+<ul>
+<li>The projected clock time is rounded to five minutes; the weekly form carries the weekday, the 5h form does not.</li>
+<li>The allowance prints one decimal under 1% and whole numbers from 1%.</li>
+<li>The tick on the bar stands at E. The fill past the tick is coral only when the status is Over pace.</li>
+<li>Stale windows compute nothing; a window with U = 0 has no rate and prints no projection; an unknown window (section 3) prints "unknown window".</li>
+</ul>
+<h3>Worked example, the sample</h3>
+<p>Now: Thursday 15 October 2026, 14:20.</p>
+<table>
+<tr><th></th><th>Weekly</th><th>5h window</th></tr>
+<tr><td>U</td><td>61%</td><td>24%</td></tr>
+<tr><td>S</td><td>Sun 11 Oct 18:00</td><td>12:45</td></tr>
+<tr><td>R</td><td>Sun 18 Oct 18:00</td><td>17:45</td></tr>
+<tr><td>elapsed</td><td>92 h 20 min = 92.33 h</td><td>95 min = 1.583 h</td></tr>
+<tr><td>remaining</td><td>75 h 40 min = 75.67 h</td><td>205 min = 3.417 h</td></tr>
+<tr><td>E</td><td>92.33 / 168 = 55%</td><td>95 / 300 = 32%</td></tr>
+<tr><td>status</td><td>61 &gt; 60: Over pace</td><td>24 &lt; 27: Ahead</td></tr>
+<tr><td>rate</td><td>61 / 92.33 = 0.66% an hour</td><td>24 / 1.583 = 15.2% an hour (0.25% a minute)</td></tr>
+<tr><td>to_limit</td><td>39 / 0.66 = 59 h, before the reset</td><td>76 / 15.2 = 5.0 h, after the reset</td></tr>
+<tr><td>projection</td><td>limit Sun 01:20 at this rate</td><td>24 + 15.2 × 3.417 = 76% by reset at this rate</td></tr>
+<tr><td>allowance</td><td>39 / 75.67 = 0.5% an hour left</td><td>76 / 3.417 = 22% an hour left</td></tr>
+<tr><td>countdown</td><td>in 3d 3h</td><td>in 3h 25m</td></tr>
+</table>
+<div class="spec"><div class="wrap">
+<div class="t pop"><div id="w-weekly"></div><div class="cap">the weekly window as rendered from these inputs</div></div>
+<div class="t pop"><div id="w-five"></div><div class="cap">the 5h window</div></div>
+</div></div>
+<p>The two windows show both branches on purpose: weekly reaches the limit before the reset, the 5h window ends under it. These figures are the unit test fixtures.</p>
+
+<h2 id="mac">8  The Mac sampler</h2>
+<p>Every call is a public Mach, sysctl, IOKit or libproc call made in process; no tool is spawned, no root, no entitlement. All of them were run from an unsigned binary on the build Mac on 2026-10-13. Two readings depend on keys Apple does not document: they are shown when present and omitted when absent, never guessed.</p>
+<table>
+<tr><th>Figure</th><th>Call</th><th>Status</th></tr>
+<tr><td>CPU per core</td><td><code>host_processor_info(PROCESSOR_CPU_LOAD_INFO)</code>, tick deltas of user, system, nice, idle between two samples</td><td>public; proven, 10 cores</td></tr>
+<tr><td>CPU user and system split</td><td>the same ticks summed, or <code>host_statistics(HOST_CPU_LOAD_INFO)</code></td><td>public; proven</td></tr>
+<tr><td>Core count and kinds</td><td><code>sysctl hw.perflevel0.name</code>, <code>hw.perflevel1.name</code> and their core counts</td><td>public</td></tr>
+<tr><td>Memory used of total</td><td><code>host_statistics64(HOST_VM_INFO64)</code>: Activity Monitor style used is internal minus purgeable, plus wired, plus compressed, times the page size; total from <code>sysctl hw.memsize</code></td><td>public; proven, 24.47 of 32 GB</td></tr>
+<tr><td>Memory pressure</td><td><code>sysctlbyname("kern.memorystatus_vm_pressure_level")</code>: 1 normal, 2 warn, 4 critical, from <code>kern_memorystatus.h</code></td><td>public; proven</td></tr>
+<tr><td>Swap used</td><td><code>sysctlbyname("vm.swapusage")</code>, an <code>xsw_usage</code> struct</td><td>public; proven</td></tr>
+<tr><td>GPU utilisation</td><td>IOKit <code>IOServiceMatching("IOAccelerator")</code>, the <code>PerformanceStatistics</code> dictionary, key <code>Device Utilization %</code> (fallback <code>GPU Activity(%)</code>)</td><td>the class is public, the key is not documented; proven on the build Mac; broke on macOS 15.0 and 15.3 in the past; best effort</td></tr>
+<tr><td>Battery percent, charging, charged, time to full or empty</td><td><code>IOPSCopyPowerSourcesInfo</code>, <code>IOPSCopyPowerSourcesList</code>, <code>IOPSGetPowerSourceDescription</code>, <code>kIOPSTimeToEmptyKey</code>, <code>kIOPSTimeToFullChargeKey</code>; changes via <code>IOPSNotificationCreateRunLoopSource</code></td><td>public and documented; proven</td></tr>
+<tr><td>Adapter watts</td><td><code>IOPSCopyExternalPowerAdapterDetails</code>, <code>kIOPSPowerAdapterWattsKey</code></td><td>public; proven, 85 W</td></tr>
+<tr><td>Watts in or out</td><td><code>AppleSmartBattery</code> registry entry, <code>Voltage</code> (mV) times <code>Amperage</code> (mA), negative when discharging</td><td>not documented; proven present; best effort</td></tr>
+<tr><td>Cycles</td><td><code>AppleSmartBattery</code> <code>CycleCount</code></td><td>not documented; proven present (315)</td></tr>
+<tr><td>Health</td><td><code>AppleSmartBattery</code> <code>NominalChargeCapacity</code> over <code>DesignCapacity</code>, or <code>AppleRawMaxCapacity</code> where present</td><td>not documented; absent on the Mac it was measured on, so the fallback is "health n/a" and cycles alone</td></tr>
+<tr><td>Processes by CPU and memory</td><td>libproc: <code>proc_listallpids</code>, <code>proc_pid_rusage(pid, RUSAGE_INFO_V6)</code> for <code>ri_user_time + ri_system_time</code> deltas between two samples and <code>ri_phys_footprint</code>; names from <code>proc_name</code> and <code>proc_pidpath</code></td><td>in the SDK; proven for 551 of 751 processes, the rest are other users' and protected processes, as expected without root</td></tr>
+</table>
+<p>65535 in a battery time field means unknown and is shown as nothing. Out of scope for the first version: CPU frequency (IOReport, undocumented), temperatures (SMC keys that change per chip), per process GPU (no public API).</p>
+<h3>Intervals and budget</h3>
+<ul>
+<li>Popover open: every 2 s, all figures, the process table included. Measured: sampling everything every 2 s, every process' rusage included, costs 0.40% of one core (<code>getrusage(RUSAGE_SELF)</code> over 60 s, 4.5 to 5.1 ms per sample).</li>
+<li>Popover closed: every 10 s, CPU totals, pressure, and one libproc pass for the warning rule; below 0.1% of a core by the same measure. GPU and battery are not sampled while closed unless "Mac figures in the bar" is on.</li>
+<li>Timers are <code>DispatchSourceTimer</code> on a utility queue with a leeway of 10% of the interval.</li>
+</ul>
+<h3>The Mac warning rule</h3>
+<p>Memory pressure warn or critical, or one process over 80% CPU for 60 s, timed by the clock from the first sample that saw it, so the rule is the same at the 2 s and the 10 s cadence. While it holds: the Mac tab gets the ● dot, the menu bar item appends ⚠. The Mac figures themselves stay off the menu bar unless the setting is on.</p>
+
+<h2 id="notifications">9  Notifications</h2>
+<ul>
+<li>Two nudges, through the macOS notification centre, as banners the OS draws. No sound, no icon beyond what the OS adds.</li>
+<li>"Weekly at 80%" with "2 days 4 h to the reset. At this pace the limit lands Saturday 09:00." Fires once per weekly window when the snapshot first shows 80% or more and is not stale. The body is built from the pace model: the countdown as days and hours, then the projection sentence.</li>
+<li>"5h window ends in 15 min" with "34% used." Fires once per 5h window, 15 minutes before <code>resets_at</code>, only if a snapshot younger than an hour exists.</li>
+<li>Both behind the Settings row "Nudge at 80% and before the 5h end", on by default. The first time it is on, the app asks for notification permission; if denied, the row's second line says so.</li>
+<li>Framework: UserNotifications (<code>UNUserNotificationCenter</code>). <span class="verify">to be verified:</span> that notification permission can be requested from an app bundle assembled by script without an Xcode project; neither the research nor the verification run covers it. If it cannot, <code>NSUserNotification</code> is the fallback (deprecated, still present).</li>
+</ul>
+
+<h2 id="settings">10  Settings</h2>
+<table class="nw">
+<tr><th>Key</th><th>Type</th><th>Default</th><th>Row</th></tr>
+<tr><td>macFiguresInBar</td><td>bool</td><td>false</td><td>Mac figures in the bar</td></tr>
+<tr><td>nudges</td><td>bool</td><td>true</td><td>Nudge at 80% and before the 5h end</td></tr>
+<tr><td>listPriceEquivalent</td><td>bool</td><td>true</td><td>List price equivalent (second line: tokens at list prices, not the plan price)</td></tr>
+<tr><td>hookPreviousCommand</td><td>string</td><td>none</td><td>the status line command that was in settings.json before install, for uninstall; internal</td></tr>
+<tr><td>nudgedWeeklyWindow</td><td>epoch seconds</td><td>none</td><td>the resets_at of the weekly window last nudged; internal</td></tr>
+<tr><td>nudgedFiveHourWindow</td><td>epoch seconds</td><td>none</td><td>the resets_at of the 5h window last nudged; internal</td></tr>
+</table>
+<p>Stored in UserDefaults (the app's preferences plist in <code>~/Library/Preferences</code>). The week over week records and the session snapshots live in Application Support. Nothing else is stored. The Settings tab also carries the privacy sentence as text and Quit with ⌘Q. There is no launch at login setting in the first version (open item).</p>
+
+<h2 id="item">11  The menu bar item</h2>
+<p>One item, variable length. A template image drawn by the custom view: the weekly percentage in the system font with tabular digits at 13 pt, a 5 px gap, a 5 cell block bar at 9 pt in SF Mono with the tick at the elapsed share. Monochrome; the OS inverts it on a light menu bar. Width changes only when the digit count or the appended figure changes.</p>
+<table class="nw">
+<tr><th>State</th><th>Drawing</th><th>Trigger</th></tr>
+<tr><td>On pace</td><td>digits 400, monochrome bar, tick</td><td>U within 5 points of E</td></tr>
+<tr><td>Ahead</td><td>same</td><td>U below E minus 5</td></tr>
+<tr><td>Over pace</td><td>digits 600; the bar has no tick and no ▓, the semibold figure carries it</td><td>U above E plus 5</td></tr>
+<tr><td>Stale</td><td>the whole item at 50% opacity</td><td>no snapshot for over an hour, or the window rolled</td></tr>
+<tr><td>Mac warning</td><td>⚠ appended</td><td>the rule in section 8</td></tr>
+<tr><td>With the Mac figure</td><td>" CPU 9%" appended</td><td>the setting macFiguresInBar</td></tr>
+<tr><td>No snapshot yet</td><td>the five cell track alone, no figure, at 50% opacity</td><td>no snapshot file, or none with rate_limits</td></tr>
+</table>
+<p>Click opens the popover; a second click or Esc closes it. The item's accessibility label says the whole state in words (style guide, section 9).</p>
+
+<h2 id="screens">12  Every screen, in order</h2>
+<h3>Claude tab (default)</h3>
+<ol>
+<li>Header line, dim: "Usage live  Mac live" while a session fed in the last 60 s; otherwise "Usage as of HH:MM, last Claude Code session"; before any feed arrived, "No usage feed yet  Mac live".</li>
+<li>The ▔ rule, full width, accent.</li>
+<li>Tab strip: Claude (selected), Mac (with ● when warning), Settings.</li>
+<li>Blank.</li>
+<li>Weekly (all models): title, 36 cell bar with " N% used", "Resets Sun 18:00  in 3d 3h", "Over pace  limit Sun 01:20 at this rate", "0.5% an hour left".</li>
+<li>Blank.</li>
+<li>5h window: the same five lines.</li>
+<li>Blank.</li>
+<li>Open sessions: the title, then per open session the project, model and context figure line and the context bar line. Omitted when there is none.</li>
+<li>Blank.</li>
+<li>"Tokens by model  7 days" (or "Tokens by project  7 days", "Tokens by session  today"), the section switch, up to five rows, "[list price equivalent  USD 1,140]" when the setting is on, "[44% by subagents]".</li>
+<li>Blank.</li>
+<li>Week over week: four rows.</li>
+<li>Blank, then the key hints in quiet: "Esc closes  Tab switches  m p s sections". The m p s hint shows on this tab only, where those keys work.</li>
+</ol>
+<h3>Mac tab</h3>
+<ol>
+<li>Header, rule, tab strip, blank.</li>
+<li>CPU: 36 cell bar with " 9%", then "user 5%  system 4%  10 cores".</li>
+<li>Blank. GPU: bar with " 11%", then "device utilisation". Omitted when the key is absent.</li>
+<li>Blank. Memory: the 20 by 10 grid, then the three legend lines.</li>
+<li>Blank. Battery: bar with " 75%", then "charging  47.6 W in  94 W adapter", then "full in 51 min  health 89%  316 cycles". On battery: "discharging  12.3 W out", "empty in 4 h 10 min  health 89%  316 cycles". Health absent: "health n/a". Without a battery (a desktop Mac): the section is omitted.</li>
+<li>Blank. Processes by CPU: five rows; the figure's tooltip carries CPU and memory. A separate memory list is not drawn.</li>
+<li>Blank, key hints: "Esc closes  Tab switches".</li>
+</ol>
+<h3>Settings tab</h3>
+<ol>
+<li>Header, rule, tab strip, blank.</li>
+<li>"[ ] Mac figures in the bar".</li>
+<li>"[x] Nudge at 80% and before the 5h end".</li>
+<li>"[x] List price equivalent", second line "tokens at list prices, not the plan price".</li>
+<li>Blank. "Install the status line entry" with "one statusLine entry in ~/.claude/settings.json" dim under it, or, once installed, "Remove the status line entry" with "puts back what statusLine held before". An error from either click follows as a third dim line.</li>
+<li>Blank. "This app makes no network calls. Usage comes" and "from Claude Code's own status feed on this Mac." dim.</li>
+<li>Blank. "Quit" with "⌘Q" right aligned.</li>
+<li>Blank, key hints: "Esc closes  Tab switches".</li>
+</ol>
+<div class="stage" style="max-width:none"><div class="cols"><div id="s-pop0"></div><div id="s-pop1"></div><div id="s-pop2"></div></div></div>
+
+<h2 id="privacy">13  The privacy statement</h2>
+<p>The full text is the <a href="privacy.html">privacy page</a>. The short form inside the app, verbatim, in Settings:</p>
+<pre>This app makes no network calls. Usage comes
+from Claude Code's own status feed on this Mac.</pre>
+
+<h2 id="errors">14  Error states</h2>
+<table class="nw">
+<tr><th>State</th><th>Where</th><th>Text</th></tr>
+<tr><td>No hook</td><td>in place of the windows</td><td>"Weekly and 5h window" bold; "needs Claude Code's status line feed", "one statusLine entry in ~/.claude/settings.json" and "chained if one exists" (or "your current status line is kept and chained") dim; then the button "Install the status line hook", which installs it on click. The menu bar item shows the track alone.</td></tr>
+<tr><td>No session yet</td><td>both window sections</td><td>the title, an empty bar and "no session yet  open Claude Code once" dim; the item shows the track alone.</td></tr>
+<tr><td>Feed without rate_limits</td><td>nothing visible</td><td>the first call of every session has no rate_limits; the app keeps the previous windows and waits. If there were none, the "No session yet" text stands until the second call.</td></tr>
+<tr><td>Window absent</td><td>that window's section</td><td>title, empty bar, "not in the last feed" dim.</td></tr>
+<tr><td>Stale</td><td>the window section, the header, the Claude tab</td><td>section 3, the stale form, the header's "last Claude Code session", and the note "limits are shared with the Claude app and other Macs, so the real figure may be higher".</td></tr>
+<tr><td>Reset passed while stale</td><td>the window section</td><td>the stale form with "reset passed Sun 18:00" in place of the reset line.</td></tr>
+<tr><td>Unknown window</td><td>the window section</td><td>the percent and "unknown window" dim; no tick, no pace lines.</td></tr>
+<tr><td>No transcripts</td><td>the token section</td><td>"No transcripts in ~/.claude/projects" dim; the chips and week over week are omitted.</td></tr>
+<tr><td>Permission denied</td><td>the token section, or the Mac tab</td><td>"Cannot read ~/.claude/projects" or "Cannot read the process list" dim, with the error's own message on the next line, dim. Nothing is retried faster than the normal interval.</td></tr>
+<tr><td>Notifications denied</td><td>the nudge setting's second line</td><td>"Notifications are off for this app in System Settings" dim.</td></tr>
+<tr><td>GPU, battery or health key missing</td><td>the Mac tab</td><td>the figure is omitted, or "health n/a"; never a dash in its place.</td></tr>
+<tr><td>Unpriced model</td><td>the chip</td><td>"[list price equivalent  USD 1,140  one model unpriced]".</td></tr>
+</table>
+
+<h2 id="logging">15  Logging</h2>
+<p>No log file. Errors are shown in the popover in the states above. One kind of error also goes to the macOS unified log: a failed install or removal of the status line entry, under the subsystem <code>dev.tokenpanda.app</code>, with the message marked private. A debug build may print to stdout; a release build prints nothing.</p>
+
+<h2 id="updates">16  Updates</h2>
+<p>No update mechanism in the app: no Sparkle, no appcast, no version check against GitHub. Releases are published on GitHub Releases; the Homebrew tap's cask carries the version, and <code>brew upgrade</code> updates it. Users who download the zip check the releases page themselves. This is what keeps the network call count at zero.</p>
+
+<h2 id="packaging">17  Packaging</h2>
+<h3>Build</h3>
+<pre>scripts/build-app.sh 0.1.0   # swift build -c release, then build/tokenpanda.app: Contents/MacOS,
+                             # Contents/Resources (hook.sh), Info.plist (LSUIElement true), ad hoc codesign;
+                             # then build/tokenpanda-0.1.0.zip and its SHA-256</pre>
+<p>Two release paths. Releases are built by path one for now; path two is written here for when the project signs with a Developer ID.</p>
+<h3>Path one: unsigned (ad hoc), own tap</h3>
+<p>Ad hoc signing does not satisfy Gatekeeper on a downloaded file, and since macOS Sequoia Control-click no longer overrides it. Apple's current page (published 2026-05-27) gives the flow, which the README repeats:</p>
+<ol>
+<li>Try to open the app.</li>
+<li>Open System Settings, click Privacy &amp; Security, scroll down, and click the Open Anyway button.</li>
+<li>The warning reappears; click Open. The app is now saved as an exception and opens by double click from then on.</li>
+</ol>
+<p>Apple's page names Catalina and later and Sequoia; it does not name macOS 26 or 27, so it is Apple's current page rather than a version specific statement. Removing the quarantine attribute with <code>xattr</code> is a community workaround and is not in the README.</p>
+<p>Homebrew's main cask repo requires that artefacts "must pass Homebrew's Gatekeeper checks", and support for failing casks ended on 2026-09-01, so an unsigned app lives in its own tap: the repository <code>tokenpandadev/homebrew-tap</code>, with a <code>Casks</code> directory at the top level holding <code>tokenpanda.rb</code> (the template is in this repository under <code>Casks/</code>); users run <code>brew install tokenpandadev/tap/tokenpanda</code>. No notability rule applies to a tap; "Non-official taps require explicit trust by default". The Open Anyway flow still applies after a brew install.</p>
+<h3>Path two: Developer ID and notarisation</h3>
+<ul>
+<li>Apple Developer Program, 99 USD a year, includes the Developer ID certificate; no fee waiver for an individual.</li>
+<li>Sign with Developer ID, hardened runtime (<code>codesign --options runtime</code>), a secure timestamp, no get-task-allow; <code>xcrun notarytool submit app.zip --keychain-profile &lt;profile&gt; --wait</code>; <code>xcrun stapler staple tokenpanda.app</code>. 75 notarisations a day; most finish within five minutes. Stapled, Gatekeeper needs no online check and the user sees no warning.</li>
+<li>GitHub Actions: free for a public repository; the macos-26 image is macOS 26 on Arm64 with Xcode 26.6 by default. Secrets: the base64 .p12, its password, an App Store Connect API key, the team id; a temporary keychain; build, sign, notarytool, stapler, release.</li>
+<li>The main Homebrew cask repo then becomes possible once the repo meets its notability rule: "at least 30 forks, 30 watchers or 75 stars", "at least 90 forks, 90 watchers or 225 stars for a self-submission by the repository owner", and not under 30 days old. Until then the own tap serves notarised builds too.</li>
+</ul>
+
+<h2 id="licence">18  Licence</h2>
+<p>MIT. The LICENSE file at the root of the repository carries the text and the line "Copyright (c) 2026 tokenpanda". The licence is named in the README and in Package.swift's comment header; no licence text is shown inside the app.</p>
+
+<h2 id="tests">19  Test plan</h2>
+<h3>Unit tests, in the package</h3>
+<ul>
+<li>Pace model: the worked example of section 7 as fixtures, both branches; the three status words at the thresholds (U = E + 5 is On pace, U = E + 5.01 is Over pace); U = 0; T past R; an unknown key yields "unknown window"; a second resets_at that contradicts the key's length yields "unknown window".</li>
+<li>Feed parser: the captured sample JSON (percentages as integers) and the doc example (23.5) both parse; a first call without rate_limits leaves the windows untouched; unknown keys such as <code>scratchpad_dir</code> are ignored; session_id, project_dir, model, context_window and cost are read; <code>current_usage</code> null is handled.</li>
+<li>Open sessions: a file written 9 s ago is open, 11 s ago is not, 61 s ago is deleted.</li>
+<li>Bar builder: 36 cells at 61% is 21 full cells and a full block (22 cells); 50 cells at 9% is four full cells and ▌; the tick at E = 55% of 36 is cell 20; the tick never exceeds N - 1; stale yields no coral.</li>
+<li>Transcript reader: a fixture transcript with one message id written three times with identical usage sums it once; a <code>&lt;synthetic&gt;</code> line is skipped; a malformed line is skipped; a file under <code>subagents/</code> and a line with <code>isSidechain</code> true count as agent share; a file under <code>memory/</code> or <code>tool-results/</code> is never opened (the enumerator is tested against a fixture tree); the sum matches the fixture's <code>cost-state</code> line within rounding.</li>
+<li>Prices: one message per row of the table against a hand computed figure; an unknown id counts tokens and no cost; the Haiku 5.5 tier by input size; the 5m and 1h split.</li>
+<li>Text renderer: every component of the style guide against a golden string, so a change to the grammar is visible in a diff.</li>
+</ul>
+<h3>By hand, before a release</h3>
+<ul>
+<li>Install the hook on a Mac with no status line and on one with an existing status line; confirm the existing one still renders and settings.json keeps its other keys.</li>
+<li>Start a Claude Code session; confirm "Usage live" after the first reply and the open session row; quit the session; confirm the row leaves after 60 s and "Usage as of HH:MM, last Claude Code session" appears; set the clock forward an hour and confirm the stale form.</li>
+<li>Open Anyway flow on a clean user account (path one), or a clean Gatekeeper pass (path two).</li>
+<li>Reduce motion on: no animation. VoiceOver: every label of the style guide's table reads as written.</li>
+<li>Light and dark menu bar; a Mac on battery; a desktop Mac without a battery; a Mac without the capacity keys ("health n/a").</li>
+<li>macOS 26 and later: System Settings, Menu Bar, the app must be allowed or its item does not show.</li>
+<li>CPU budget: with the popover closed, read the app's CPU in Activity Monitor over ten minutes; the average must be under 0.5% of one core. With it open, under 2%.</li>
+<li>Network: run with Little Snitch or <code>nettop</code> filtered to the app for an hour; the count of connections must be zero.</li>
+</ul>
+
+<div class="foot">Overview  Style guide  Spec  Privacy</div>
+</main>
+</div>
+</div>
+<script src="docs.js"></script>
+<script>
+(() => {
+const root = document.querySelector('.r6');
+R6.probe(root);
+document.getElementById('w-weekly').innerHTML = R6.windowSection(R6.pace('weekly', 61));
+document.getElementById('w-five').innerHTML = R6.windowSection(R6.pace('five', 24));
+document.getElementById('s-open').innerHTML = R6.openSessions();
+document.getElementById('s-pop0').innerHTML = R6.popover(0, {weekly:61, five:24});
+document.getElementById('s-pop1').innerHTML = R6.popover(1, {weekly:61, five:24});
+document.getElementById('s-pop2').innerHTML = R6.popover(2, {weekly:61, five:24});
+})();
+</script>
+</body>
+</html>
