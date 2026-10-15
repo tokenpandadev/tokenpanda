@@ -20,7 +20,7 @@ Every time I looked at a usage percentage I did the same sum in my head. It is T
 
 <img src="docs/shots/item-states.png" width="609" alt="The menu bar item in five states: ahead, stale, cpu warning, no feed yet, closed">
 
-The menu bar item: the weekly percentage and a five cell bar, dimmed when the figures are older than an hour.
+The menu bar item: the panda and the weekly percentage, dimmed when the figures are older than an hour.
 
 ![The popover on its three tabs: Claude, Mac and Settings](docs/shots/tabs.png)
 
@@ -75,7 +75,7 @@ You need a Mac on macOS 14 or later with the Command Line Tools or Xcode. Swift 
 ```sh
 swift build
 swift test -Xswiftc -plugin-path -Xswiftc /Library/Developer/CommandLineTools/usr/lib/swift/host/plugins/testing
-scripts/build-app.sh 0.1.1
+scripts/build-app.sh 0.1.2
 open build/tokenpanda.app
 ```
 

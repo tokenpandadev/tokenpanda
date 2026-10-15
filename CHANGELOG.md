@@ -1,5 +1,9 @@
 # Changelog
 
+## 0.1.2, 2026-10-15
+
+- The menu bar item is the panda and the weekly percentage. The five cell bar is gone; the percentage still goes semibold over pace and the item still dims when the figures are older than an hour.
+
 ## 0.1.1, 2026-10-14
 
 - App icon: the panda drawn in 44 terminal cells, also used for the documentation favicon.

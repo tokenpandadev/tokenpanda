@@ -61,7 +61,7 @@
 <ul>
 <li><b>Swift Package Manager only.</b> No Xcode project. A package with <code>swift-tools-version 6.0</code>, platform macOS 14, seven library targets, one executable target <code>tokenpanda</code> linking AppKit, IOKit and UserNotifications, and one test target <code>tokenpandaTests</code>. Proven on the build Mac (Command Line Tools only, Swift 6.4, SDK 27.0): a status item plus popover package builds in 32 s with <code>swift build -c release</code>; SwiftPM signs the product ad hoc by itself. <code>xcodebuild</code> is not needed and not available there.</li>
 <li><b>Minimum macOS 14.</b> The widest floor among the AI usage meters; the package declares it. Apple silicon first; a universal binary is a release option, untested until someone tests it.</li>
-<li><b>AppKit status item.</b> <code>NSStatusBar.system.statusItem(withLength: .variableLength)</code> with a custom <code>NSView</code> in the item's button that draws the digits and the 5 cell bar and marks itself dirty when a value arrives; no redraw timer. SwiftUI's MenuBarExtra is not used: no custom view in the item, no fade on dismiss, no persisted selection.</li>
+<li><b>AppKit status item.</b> <code>NSStatusBar.system.statusItem(withLength: .variableLength)</code> with a custom <code>NSView</code> in the item's button that draws the panda and the digits and marks itself dirty when a value arrives; no redraw timer. SwiftUI's MenuBarExtra is not used: no custom view in the item, no fade on dismiss, no persisted selection.</li>
 <li><b>NSPopover</b> anchored to the item, 380 by 420 points, with an <code>NSVisualEffectView</code> for the glass and an <code>NSHostingController</code> root; the content is SwiftUI text views rendering the lines the Text module produces, or an AppKit text view, the builder's choice. The popover is one monospaced layout of lines, not controls stacked in a grid.</li>
 <li><b>Activation policy accessory</b> (<code>NSApp.setActivationPolicy(.accessory)</code>) and <code>LSUIElement</code> true in Info.plist: no Dock icon, no app menu.</li>
 <li><b>Not sandboxed.</b> The transcript reader needs <code>~/.claude</code>, the process list needs libproc, and the hook lives in Application Support. The entitlements file is empty.</li>
@@ -327,16 +327,16 @@ countdown  = remaining as "in Nd Nh" or "in Nh Nm"</pre>
 <p>Stored in UserDefaults (the app's preferences plist in <code>~/Library/Preferences</code>). The week over week records and the session snapshots live in Application Support. Nothing else is stored. The Settings tab also carries the privacy sentence as text and Quit with ⌘Q. There is no launch at login setting in the first version (open item).</p>
 
 <h2 id="item">11  The menu bar item</h2>
-<p>One item, variable length. A template image drawn by the custom view: the weekly percentage in the system font with tabular digits at 13 pt, a 5 px gap, a 5 cell block bar at 9 pt in SF Mono with the tick at the elapsed share. Monochrome; the OS inverts it on a light menu bar. Width changes only when the digit count or the appended figure changes.</p>
+<p>One item, variable length. A template image drawn by the custom view: the panda from the app icon as a 7 by 7 pixel mark at 2 pt a pixel, a 5 pt gap, then the weekly percentage in the system font with tabular digits at 13 pt. Monochrome; the OS inverts it on a light menu bar. Width changes only when the digit count or the appended figure changes.</p>
 <table class="nw">
 <tr><th>State</th><th>Drawing</th><th>Trigger</th></tr>
-<tr><td>On pace</td><td>digits 400, monochrome bar, tick</td><td>U within 5 points of E</td></tr>
+<tr><td>On pace</td><td>panda, digits 400, monochrome</td><td>U within 5 points of E</td></tr>
 <tr><td>Ahead</td><td>same</td><td>U below E minus 5</td></tr>
-<tr><td>Over pace</td><td>digits 600; the bar has no tick and no ▓, the semibold figure carries it</td><td>U above E plus 5</td></tr>
+<tr><td>Over pace</td><td>digits 600; the semibold figure carries it</td><td>U above E plus 5</td></tr>
 <tr><td>Stale</td><td>the whole item at 50% opacity</td><td>no snapshot for over an hour, or the window rolled</td></tr>
 <tr><td>Mac warning</td><td>⚠ appended</td><td>the rule in section 8</td></tr>
 <tr><td>With the Mac figure</td><td>" CPU 9%" appended</td><td>the setting macFiguresInBar</td></tr>
-<tr><td>No snapshot yet</td><td>the five cell track alone, no figure, at 50% opacity</td><td>no snapshot file, or none with rate_limits</td></tr>
+<tr><td>No snapshot yet</td><td>the panda alone, no figure, at 50% opacity</td><td>no snapshot file, or none with rate_limits</td></tr>
 </table>
 <p>Click opens the popover; a second click or Esc closes it. The item's accessibility label says the whole state in words (style guide, section 9).</p>
 
@@ -411,9 +411,9 @@ from Claude Code's own status feed on this Mac.</pre>
 
 <h2 id="packaging">17  Packaging</h2>
 <h3>Build</h3>
-<pre>scripts/build-app.sh 0.1.1   # swift build -c release, then build/tokenpanda.app: Contents/MacOS,
+<pre>scripts/build-app.sh 0.1.2   # swift build -c release, then build/tokenpanda.app: Contents/MacOS,
                              # Contents/Resources (hook.sh, AppIcon.icns), Info.plist (LSUIElement true,
-                             # CFBundleIconFile AppIcon), ad hoc codesign; then build/tokenpanda-0.1.1.zip and its SHA-256</pre>
+                             # CFBundleIconFile AppIcon), ad hoc codesign; then build/tokenpanda-0.1.2.zip and its SHA-256</pre>
 <p>Two release paths. Releases are built by path one for now; path two is written here for when the project signs with a Developer ID.</p>
 <h3>Path one: unsigned (ad hoc), own tap</h3>
 <p>Ad hoc signing does not satisfy Gatekeeper on a downloaded file, and since macOS Sequoia Control-click no longer overrides it. Apple's current page (published 2026-05-27) gives the flow, which the README repeats:</p>

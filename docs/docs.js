@@ -166,18 +166,11 @@ function cbRow(label, on, sub, o = {}) {
   return s;
 }
 
-/* menu bar item: SF digits, 5 cell block bar at 9 px with the tick, monochrome */
+/* menu bar item (0.1.2): the panda as a 7 by 7 pixel mark, a 5 px gap, SF digits, monochrome */
+const PANDA = '<svg class="pnd" viewBox="0 0 64 64" shape-rendering="crispEdges" aria-hidden="true"><path fill="currentColor" d="M4 4h16v8H4zM44 4h16v8H44zM4 12h8v8H4zM52 12h8v8h-8zM12 12h40v8H12zM4 20h56v8H4zM4 28h8v8H4zM28 28h8v8h-8zM52 28h8v8h-8zM4 36h8v8H4zM20 36h24v8H20zM52 36h8v8h-8zM4 44h24v8H4zM36 44h24v8H36zM12 52h40v8H12z"/></svg>';
 function item(used, E, o = {}) {
-  const N = 5, f = used / 100 * N, full = Math.floor(f), e8 = Math.round((f - full) * 8);
-  const t = Math.min(N - 1, Math.round(E / 100 * N));
-  let solid = '', rest = '';
-  for (let i = 0; i < N; i++) {
-    const g = i < full ? '█' : i === full ? (e8 === 8 ? '█' : EIGHTHS[e8]) : ' ';
-    const gg = (o.over && i >= t && g === '█') ? '▓' : g;
-    if (gg === '█' && !rest) solid += gg; else rest += gg;
-  }
   const cls = 'mbi' + (o.over ? ' over' : '') + (o.stale ? ' stale' : '');
-  return '<span class="' + cls + '">' + used + '%<span class="mini" style="width:' + N + 'ch"><span class="mt">' + '█'.repeat(N) + '</span><span class="mf"><span class="solid">' + solid + '</span>' + rest + '</span><span class="mk" style="left:' + t + 'ch">▏</span></span>'
+  return '<span class="' + cls + '">' + PANDA + (used == null ? '' : used + '%')
     + (o.warn ? '<span class="g">⚠</span>' : '') + (o.mac ? '<span> CPU 9%</span>' : '') + '</span>';
 }
 const strip = (html, light) => '<span class="strip' + (light ? ' light' : '') + '">' + html + '</span>';
