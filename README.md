@@ -85,7 +85,7 @@ The documentation is plain HTML in `docs/`: an overview, the style guide, the sp
 
 ## Good tools that came first
 
-Many good tools exist, and I learned from them. One sentence each, with the link.
+Plenty of good tools came before this one, and I learned from all of them.
 
 - [Headroom](https://github.com/sandrich/headroom): Mac stats and the Claude Code limits in one small menu bar item, in Swift, MIT. It is the reason I started.
 - [Pacer](https://github.com/EricAndrechek/Pacer): pace gauges for the 5h window, the week and each model, in a native Mac app. MIT.
