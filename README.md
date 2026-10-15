@@ -4,7 +4,7 @@
 
 A macOS menu bar app that tells me if I am ahead of the clock on my Claude plan, or behind it.
 
-[![Latest release](https://img.shields.io/github/v/release/tokenpandadev/tokenpanda?style=flat-square&color=b1b9f9)](https://github.com/tokenpandadev/tokenpanda/releases/latest) [![Licence MIT](https://img.shields.io/badge/licence-MIT-b1b9f9?style=flat-square)](LICENSE) [![Build](https://img.shields.io/github/actions/workflow/status/tokenpandadev/tokenpanda/build.yml?style=flat-square)](https://github.com/tokenpandadev/tokenpanda/actions/workflows/build.yml) [![REUSE compliant](https://img.shields.io/badge/REUSE-compliant-b1b9f9?style=flat-square)](https://api.reuse.software/info/github.com/tokenpandadev/tokenpanda) [![macOS 14 and later](https://img.shields.io/badge/macOS-14%2B-b1b9f9?style=flat-square)](#install)
+[![Latest release](https://img.shields.io/github/v/release/tokenpandadev/tokenpanda?style=flat-square&color=b1b9f9)](https://github.com/tokenpandadev/tokenpanda/releases/latest) [![Licence MIT](https://img.shields.io/badge/licence-MIT-b1b9f9?style=flat-square)](LICENSE) [![Build](https://img.shields.io/github/actions/workflow/status/tokenpandadev/tokenpanda/build.yml?style=flat-square)](https://github.com/tokenpandadev/tokenpanda/actions/workflows/build.yml) [![macOS 14 and later](https://img.shields.io/badge/macOS-14%2B-b1b9f9?style=flat-square)](#install)
 
 ![The menu bar with the tokenpanda item at the top right and its popover open on the Claude tab, sample figures for Thursday 14:20](docs/shots/hero.jpg)
 
