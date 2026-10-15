@@ -100,4 +100,4 @@ Many good tools exist, and I learned from them. One sentence each, with the link
 
 MIT, see [LICENSE](LICENSE). Issues and ideas welcome.
 
-If it saved you a limit once: [Buy Me a Coffee](https://buymeacoffee.com/tokenpanda). GitHub Sponsors follows once GitHub approves it. Neither required.
+If it saved you a limit once, a coffee on [Ko-fi](https://ko-fi.com/tokenpanda) is welcome, never required. GitHub Sponsors follows once GitHub approves it.
