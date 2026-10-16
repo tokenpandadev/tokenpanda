@@ -7,7 +7,7 @@ cask "tokenpanda" do
   version "RELEASE_VERSION"
   sha256 "RELEASE_SHA256"
 
-  url "https://github.com/tokenpandadev/tokenpanda/releases/download/v#{version}/tokenpanda-#{version}.zip"
+  url "https://github.com/tokenpandadev/tokenpanda-app/releases/download/v#{version}/tokenpanda-#{version}.zip"
   name "tokenpanda"
   desc "Menu bar pace for Claude Code plan windows, and the Mac's own figures"
   homepage "https://tokenpanda.dev"
